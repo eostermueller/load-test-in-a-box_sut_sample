@@ -1,0 +1,694 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Faster Tuning with Manual Thread Dump Profiling</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css"
+	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<link rel="stylesheet" th:href="@{/css/main.css}"
+	href="../../css/main.css" />
+
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Spring Boot</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="javascript:window.open('http://localhost:4000/transaction/average?transaction-type=Web%26last=120000', 'Link to source code', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');"> Monitoring </a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="starter-template">
+			<h1>Faster Tuning with MTDP (Manual Thread Dump Profiling)</h1>
+			<h2>
+				<span th:text="' ' + ${perfKeyMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+			
+				<div class="row">
+				<p></p>                                           
+				  <div class="col-xs-12"> <span th:text="' ' + ${perfKeyDescr01}"></span>
+				  <p></p>
+				  <ol>
+				  <li><span th:text="' ' + ${perfKeyDescr02}"></span>
+				  <p></p>
+				<div class="row">                                           
+				  
+				  <div class="col-xs-12"> 
+							<div class="row">
+							  <div class="col-md-12">
+								<div class="input-group">
+								  <span class="input-group-btn">
+									<button id="id_perfKey_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span></button>
+								  </span>
+								  <input id="id_perfKey" type="text" class="form-control input-xs"  />
+								</div>
+							  </div>
+							</div> 
+							<p></p>
+					 </div>               
+				</div>                                                      
+				  
+				  </li>
+				  
+				  <li><span th:text="' ' + ${perfKeyDescr03}"></span></li>
+				  </ol>
+				   </div>
+				</div>                                                      
+				
+			</div>       
+
+			<h2>
+				<span th:text="' ' + ${xpathMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">                                           
+				  <div class="col-xs-12"> XPath Implementation </div>
+				</div>                                                      
+				<div class="row">                                           
+				  
+				  <div class="col-xs-12"> 
+
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xpath_0" class="form-check-input" type="radio" name="xpathRadios" value="option1" checked="true" />
+    <a href="http://www.oracle.com/us/technologies/java/validationxpath-141471.html">[X0] Basic approach to XPath <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/PlaybackRepository.java#L78-L88', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a> </a>
+
+														  	
+    
+  </label>
+   
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xpath_1" class="form-check-input" type="radio" name="xpathRadios" value="option2" />
+    [X1] Avoid DOM parsing by caching it for repeat input. <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/PlaybackRepository.java#L78-L88', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+  </label>
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xpath_2" class="form-check-input" type="radio" name="xpathRadios" value="option3" />
+    [X2] Avoid DOM parsing and XPath eval by caching HTTP response for repeat input. <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/PlaybackRepository.java#L78-L88', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+  </label>
+</div>
+					 </div>               
+				</div>                                                      
+				
+			</div>       
+			<h2>
+				<span th:text="' ' + ${xsltMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">                                           
+				  <div class="col-xs-12"> XSLT Implementation </div>
+				</div>                                                      
+				<div class="row">                                           
+				  
+				  <div class="col-xs-12"> 
+
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xslt_0" class="form-check-input" type="radio" name="xsltRadios" value="option1" checked="true" />
+    <a href="http://www.oracle.com/us/technologies/java/validationxpath-141471.html">[T0] <span th:text="' ' + ${xsltImpl00}"></span> <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/e304f7e7391c9d11b99b2a5df9989a64e24cc578/src/main/java/com/github/eostermueller/littlemock/Controller.java#L84-L97', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a> </a>
+  </label>
+   
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xslt_1" class="form-check-input" type="radio" name="xsltRadios" value="option2" />
+    [T1] <span th:text="' ' + ${xsltImpl01}"></span> <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/e304f7e7391c9d11b99b2a5df9989a64e24cc578/src/main/java/com/github/eostermueller/littlemock/Controller.java#L84-L97', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+  </label>
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input id="id_xslt_2" class="form-check-input" type="radio" name="xsltRadios" value="option3" />
+    [T2] <span th:text="' ' + ${xsltImpl02}"></span> <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/e304f7e7391c9d11b99b2a5df9989a64e24cc578/src/main/java/com/github/eostermueller/littlemock/Controller.java#L84-L97', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+  </label>
+</div>
+
+					 </div>               
+				</div>                                                      
+				
+			</div>       
+		
+			<h2>
+				<span th:text="' ' + ${busyMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">        
+				                                   
+				  
+				</div>                                                      
+				<div class="row">                                           
+
+				  <div class="col-xs-12"> 
+						<p/>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">
+					<div class="col-xs-12">                                           
+						
+							<div class="row">
+				  <div class="col-xs-12">
+				  	<span th:text="' ' + ${busyDescription}"></span>
+				  </div>
+							</div>  
+							  <p/>
+							
+							<div class="row">
+							  <div class="col-lg-6">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-3">
+								  <span class="input-group-btn">
+									<button id="id_processingItems_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [J]</button>
+								  </span>
+								  <input id="id_processingItems" type="text" class="form-control input-xs" />
+								  
+
+								</div>
+							  </div>
+							  <div class="col-lg-12">	
+							  <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/Controller.java#L82-L86', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>					
+							</div>  							
+							  <p/>
+							<div class="row">
+							  <div class="col-lg-6">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-3">
+								  <span class="input-group-btn">
+									<button id="id_processingIterations_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [K]</button>
+								  </span>
+								  <input id="id_processingIterations" type="text" class="form-control input-xs"  />
+								  
+								</div>
+							  </div>
+							  <div class="col-lg-12">
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/Controller.java#L82-L86', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>						
+							</div> 
+							</div>
+							</div>
+							</div> 
+							
+							  <p/>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">
+					<div class="col-xs-12">                                           
+							  
+							<div class="row">
+								  <div class="col-xs-12">
+								  	<span th:text="' ' + ${busySleep}"></span>
+					  			</div>
+							</div>  
+							  <p/>
+							<div class="row">
+							  <div class="col-lg-6">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-3">
+								  <span class="input-group-btn">
+									<button id="id_fixedDelayMilliseconds_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [L]</button>
+								  </span>
+								  <input id="id_fixedDelayMilliseconds" type="text" class="form-control input-xs"  />  								   
+								</div>
+								<div class="input-group col-xs-3">
+									<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/cb84acf6479ba5d9aca7ea60e0f83703dc82acde/src/main/java/com/github/eostermueller/littlemock/Controller.java#L58-L59', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+								</div>
+                                                   <p></p>
+                                                   <p></p>
+					   <div class="form-check">
+						   <label class="form-check-label">
+							 <input id="id_syncSleep" class="form-check-input" type="checkbox" value=""/>
+							 [M] Synchronize calls to Thread.sleep()
+							 <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/PlaybackRepository.java#L233-L241', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+						   </label>
+                                                   <p></p>
+                                                   <p></p>
+						 </div>
+
+							  </div> 				
+
+							</div>
+							</div>
+							</div>
+							</div>  
+							
+  <p/>
+					 </div>               
+				</div>                                                      
+			</div>
+
+			<h2>
+				<span th:text="' ' + ${otherMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">                                           
+				  <!-- Need to add theme, buttons  <div class="col-xs-12"> Text here </div>  -->                       
+				  
+				</div>                                                      
+				<div class="row">                                           
+				  <!-- Need to add theme, buttons -->                       
+				  <div class="col-xs-12"> 
+
+					   <div class="form-check">
+						   <label class="form-check-label">
+							 <input id="id_fileCache" class="form-check-input" type="checkbox" value=""/>
+							 [Q] File Cache
+							 <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/PlaybackRepository.java#L233-L241', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+						   </label>
+						 </div>
+					   <div class="form-check">
+						   <label class="form-check-label">
+							 <input id="id_uuidIsOptimized" class="form-check-input" type="checkbox" value=""/>
+							 [R] Optimized UUID
+							 <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/Item.java#L367-L373', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+						   </label>
+						 </div>
+					   <div class="form-check">
+						   <label class="form-check-label">
+							 <input id="id_randomIntegerImplementation" class="form-check-input" type="checkbox" value=""/>
+							 [S] Optimized Random Integer
+							  <a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/bf60252987cdfc34ef27f74fb322e29f067cf692/src/main/java/com/github/eostermueller/littlemock/Item.java#L42-L50', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+						   </label>
+						 </div>
+
+					 </div>               
+				</div>                                                      
+				
+			</div>       
+			<p/>
+			<h2>
+				<span th:text="' ' + ${oldGenMessage}"></span>
+			</h2>
+			<div class="container-fluid" style="border:1px solid #cecece;">
+				<div class="row">        
+				                                   
+				  
+				</div>                                                      
+				<div class="row">                                           
+
+				  <div class="col-md-12"> 
+						<p/>
+			<div class="container-fluid" >
+                                           
+						
+							<div class="row">
+				  <div class="col-lg-12">
+				  	<span th:text="' ' + ${oldGenDescription}"></span>
+				  </div>
+							</div>  
+							  <p/>
+							
+							<div class="row">
+							  <div class="col-md-3">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-8">
+								  <span class="input-group-btn">
+									<button id="id_oldGenRequestCountThresholdForPruning_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [A]</button>
+								  </span>
+								  <input id="id_oldGenRequestCountThresholdForPruning" type="text" class="form-control input-xs" />
+																	  
+
+								</div>
+							  </div>
+							  <div class="col-md-2">
+							  	
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/9d71f5308c8e2cad9369362fa25f0a8db3f7264d/src/main/java/com/github/eostermueller/littlemock/OldGenerationRepo.java#L77-L84', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>
+							  <div class="col-md-6"><span th:text="' ' + ${updateADescription}"></span></div>
+							</div>  							
+							  <p/>
+							<div class="row">
+							  <div class="col-md-3">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-8">
+								  <span class="input-group-btn">
+									<button id="id_oldGenMaxBytes_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [B]</button>
+								  </span>
+								  <input id="id_oldGenMaxBytes" type="text" class="form-control input-xs"  />
+								  
+								</div>
+							  </div>
+							  <div class="col-md-2">
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/9d71f5308c8e2cad9369362fa25f0a8db3f7264d/src/main/java/com/github/eostermueller/littlemock/Config.java#L173', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>						
+							  <div class="col-md-6"><span th:text="' ' + ${updateBDescription}"></span></div>
+							</div> 
+							  <p/>
+							<div class="row">
+							  <div class="col-md-3">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-8">
+								  <span class="input-group-btn">
+									<button id="id_oldGenMinExpirationMs_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [C]</button>
+								  </span>
+								  <input id="id_oldGenMinExpirationMs" type="text" class="form-control input-xs"  />
+								  
+								</div>
+							  </div>
+							  <div class="col-md-2">
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/9d71f5308c8e2cad9369362fa25f0a8db3f7264d/src/main/java/com/github/eostermueller/littlemock/Config.java#L171', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>						
+							  <div class="col-md-6"><span th:text="' ' + ${updateCDescription}"></span></div>
+							</div> 
+							  <p/>
+							<div class="row">
+							  <div class="col-md-3">
+							  	<div class="input-group col-xs-1" ></div>
+								<div class="input-group col-xs-8">
+								  <span class="input-group-btn">
+									<button id="id_oldGenMaxExpirationMs_btn" class="btn btn-secondary btn-xs" type="button"><span th:text="' ' + ${busyUpdate}"></span> [D]</button>
+								  </span>
+								  <input id="id_oldGenMaxExpirationMs" type="text" class="form-control input-xs"  />
+								  
+								</div>
+							  </div>
+							  <div class="col-md-2">
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/9d71f5308c8e2cad9369362fa25f0a8db3f7264d/src/main/java/com/github/eostermueller/littlemock/Config.java#L171', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>						
+							  <div class="col-md-6"><span th:text="' ' + ${updateDDescription}"></span></div>
+							</div> 
+
+							  <p/>
+							<div class="row">
+							  <div class="col-md-3">
+							  	<a href="/clearOldGen" target="_blank">/clearOldGen</a>
+							  </div>
+							  <div class="col-md-2">
+							  	<a href="javascript:window.open('https://github.com/eostermueller/littleMock/blob/ce721be0b7015bc5f3bfe0f1d76595aa622dc278/src/main/java/com/github/eostermueller/littlemock/OldGenerationRepo.java#L23', 'Link to source code', 'location=yes,height=570,width=920,scrollbars=yes,status=yes');"> <span th:text="${codeLink}"></span> </a>
+							  </div>						
+							  <div class="col-md-6"><span th:text="' ' + ${clearOldGenDescription}"></span></div>
+							</div> 
+							
+
+							</div> 
+							
+							  <p/>
+							
+  <p/>
+					 </div>               
+				</div>                                                      
+			</div>
+			
+			<p/>
+					<div id="alert_placeholder"></div>
+						
+		</div>
+	</div>
+
+
+	<script type="text/javascript"
+		src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+// <![CDATA[    
+
+			/**  
+			  *  Get system status when web page first loads.
+			  */
+		   var lastChangeUrl;
+           var cfgXml;
+           var xhr = new XMLHttpRequest();
+           xhr.open('GET', "/config", true);
+   
+           xhr.addEventListener("readystatechange", processRequest, false);
+           xhr.send();
+           function processRequest(event) {
+                   if (xhr.readyState == 4 && xhr.status == 200) {
+                           cfgXml = xhr.responseXML;
+                           refreshScreen();
+                           showalert("Server up, ready to tune!","alert-success");
+                   }
+           }
+           function refreshPerfKeyOnly() {
+        	   
+				var perfKey = cfgXml.getElementsByTagName('perfKey')[0].childNodes[0].nodeValue;
+				document.getElementById("id_perfKey").value = perfKey.trim();
+        	   
+           }
+           function refreshScreen() {
+           
+				var xpathImplementation = cfgXml.getElementsByTagName('xpathImplementation')[0].childNodes[0].nodeValue;
+				refreshXPathRadio( parseInt(xpathImplementation) );
+				
+				var xsltImplementation = cfgXml.getElementsByTagName('xsltImplementation')[0].childNodes[0].nodeValue;
+				refreshXsltRadio( parseInt(xsltImplementation) );
+				
+				var processingItems = cfgXml.getElementsByTagName('processingItems')[0].childNodes[0].nodeValue;
+				document.getElementById("id_processingItems").value = processingItems.trim();
+
+				var processingIterations = cfgXml.getElementsByTagName('processingIterations')[0].childNodes[0].nodeValue;
+				document.getElementById("id_processingIterations").value = processingIterations.trim();
+				
+				var fixedDelayMilliseconds = cfgXml.getElementsByTagName('fixedDelayMilliseconds')[0].childNodes[0].nodeValue;
+				document.getElementById("id_fixedDelayMilliseconds").value = fixedDelayMilliseconds.trim();
+				
+				var varFileCache = cfgXml.getElementsByTagName('fileCache')[0].childNodes[0].nodeValue;
+				document.getElementById("id_fileCache").checked = (varFileCache.trim()==="true") ? true : false;
+ 
+				var varSyncSleep = cfgXml.getElementsByTagName('syncSleep')[0].childNodes[0].nodeValue;
+				document.getElementById("id_syncSleep").checked = (varSyncSleep.trim()==="true") ? true : false;
+
+				
+				var randomIntegerImplementation = cfgXml.getElementsByTagName('randomIntegerImplementation')[0].childNodes[0].nodeValue;
+				document.getElementById("id_randomIntegerImplementation").checked = (randomIntegerImplementation.trim()==="1") ? true : false;
+
+				var varUuidIsOptimized = cfgXml.getElementsByTagName('uuidIsOptimized')[0].childNodes[0].nodeValue;
+				console.log("found uuidIsOptimized=" + varUuidIsOptimized + " from server");
+				document.getElementById("id_uuidIsOptimized").checked = (varUuidIsOptimized.trim()==="true") ? true : false;
+
+				var oldGenRequestCountThresholdForPruning = cfgXml.getElementsByTagName('oldGenRequestCountThresholdForPruning')[0].childNodes[0].nodeValue;
+				document.getElementById("id_oldGenRequestCountThresholdForPruning").value = oldGenRequestCountThresholdForPruning.trim();
+
+				var oldGenMaxBytes = cfgXml.getElementsByTagName('oldGenMaxBytes')[0].childNodes[0].nodeValue;
+				document.getElementById("id_oldGenMaxBytes").value = oldGenMaxBytes.trim();
+
+				var oldGenMinExpirationMs = cfgXml.getElementsByTagName('oldGenMinExpirationMs')[0].childNodes[0].nodeValue;
+				document.getElementById("id_oldGenMinExpirationMs").value = oldGenMinExpirationMs.trim();
+
+				var oldGenMaxExpirationMs = cfgXml.getElementsByTagName('oldGenMaxExpirationMs')[0].childNodes[0].nodeValue;
+				document.getElementById("id_oldGenMaxExpirationMs").value = oldGenMaxExpirationMs.trim();
+
+				var perfKey = cfgXml.getElementsByTagName('perfKey')[0].childNodes[0].nodeValue;
+				document.getElementById("id_perfKey").value = perfKey.trim();
+				//window.location.reload(true);
+
+				
+           }
+           function refreshXPathRadio(newValue) {
+           		
+           		switch(newValue) {
+           			case 0:
+           				document.getElementById("id_xpath_0").checked = true;
+           				document.getElementById("id_xpath_1").checked = false;
+           				document.getElementById("id_xpath_2").checked = false;
+           				break;
+           			case 1:
+           				document.getElementById("id_xpath_0").checked = false;
+           				document.getElementById("id_xpath_1").checked = true;
+           				document.getElementById("id_xpath_2").checked = false;
+           				break;
+           			case 2:
+           				document.getElementById("id_xpath_0").checked = false;
+           				document.getElementById("id_xpath_1").checked = false;
+           				document.getElementById("id_xpath_2").checked = true;
+           				break;
+           		}
+           }
+           function sendXPathRadioState() {
+           		var xpathImpl;
+           		
+           		if (
+           			    document.getElementById("id_xpath_0").checked
+           			&& !document.getElementById("id_xpath_1").checked
+           			&& !document.getElementById("id_xpath_2").checked
+           			) {
+           			xpathImpl = "0";
+           		} else if (
+           			   !document.getElementById("id_xpath_0").checked
+           			&&  document.getElementById("id_xpath_1").checked
+           			&& !document.getElementById("id_xpath_2").checked
+           			) {
+           			xpathImpl = "1";
+           		} else if (
+           			   !document.getElementById("id_xpath_0").checked
+           			&& !document.getElementById("id_xpath_1").checked
+           			&&  document.getElementById("id_xpath_2").checked
+           			) {
+           			xpathImpl = "2";
+           		} 	
+           		sendConfigChange("xpathImplementation", xpathImpl );
+           }
+           function refreshXsltRadio(newValue) {
+          		
+          		switch(newValue) {
+          			case 0:
+          				document.getElementById("id_xslt_0").checked = true;
+          				document.getElementById("id_xslt_1").checked = false;
+          				document.getElementById("id_xslt_2").checked = false;
+          				break;
+          			case 1:
+          				document.getElementById("id_xslt_0").checked = false;
+          				document.getElementById("id_xslt_1").checked = true;
+          				document.getElementById("id_xslt_2").checked = false;
+          				break;
+          			case 2:
+          				document.getElementById("id_xslt_0").checked = false;
+          				document.getElementById("id_xslt_1").checked = false;
+          				document.getElementById("id_xslt_2").checked = true;
+          				break;
+          		}
+          }
+           
+           function sendXsltRadioState() {
+          		var xsltImpl;
+          		
+          		if (
+          			    document.getElementById("id_xslt_0").checked
+          			&& !document.getElementById("id_xslt_1").checked
+          			&& !document.getElementById("id_xslt_2").checked
+          			) {
+          			xsltImpl = "0";
+          		} else if (
+          			   !document.getElementById("id_xslt_0").checked
+          			&&  document.getElementById("id_xslt_1").checked
+          			&& !document.getElementById("id_xslt_2").checked
+          			) {
+          			xsltImpl = "1";
+          		} else if (
+          			   !document.getElementById("id_xslt_0").checked
+          			&& !document.getElementById("id_xslt_1").checked
+          			&&  document.getElementById("id_xslt_2").checked
+          			) {
+          			xsltImpl = "2";
+          		} 	
+          		sendConfigChange("xsltImplementation", xsltImpl );
+          }
+           
+           /**
+             *   E V E N T     H A N D L E R S
+             *
+             */
+ 		   document.getElementById('id_fileCache').onclick = function() {
+		   		sendConfigChange("fileCache", this.checked ? "true" : "false" );
+		   };
+ 		   document.getElementById('id_syncSleep').onclick = function() {
+		   		sendConfigChange("syncSleep", this.checked ? "true" : "false" );
+		   };
+ 		   document.getElementById('id_randomIntegerImplementation').onclick = function() {
+		   		sendConfigChange("randomIntegerImplementation", this.checked ? "1" : "0" );
+		   };
+ 		   document.getElementById('id_uuidIsOptimized').onclick = function() {
+ 			   console.log("uuidIsOptimized clicked [" + this.checked  + "]");
+ 			  sendConfigChange("uuidIsOptimized", this.checked ? "true" : "false" );
+		   };
+ 		   document.getElementById('id_xpath_0').onclick = function() {
+		   		sendXPathRadioState();
+		   };
+ 		   document.getElementById('id_xpath_1').onclick = function() {
+		   		sendXPathRadioState();
+		   };
+ 		   document.getElementById('id_xpath_2').onclick = function() {
+		   		sendXPathRadioState();
+		   };
+ 		   document.getElementById('id_xslt_0').onclick = function() {
+		   		sendXsltRadioState();
+		   };
+		   document.getElementById('id_xslt_1').onclick = function() {
+		   		sendXsltRadioState();
+		   };
+		   document.getElementById('id_xslt_2').onclick = function() {
+		   		sendXsltRadioState();
+		   };
+		   
+ 		   document.getElementById('id_processingItems_btn').onclick = function() {
+				var processingItems = document.getElementById("id_processingItems").value;
+		   		sendConfigChange("processingItems", processingItems.trim() );
+		   };
+ 		   document.getElementById('id_processingIterations_btn').onclick = function() {
+				var processingIterations = document.getElementById("id_processingIterations").value;
+		   		sendConfigChange("processingIterations", processingIterations.trim() );
+		   };
+ 		   document.getElementById('id_fixedDelayMilliseconds_btn').onclick = function() {
+				var fixedDelayMilliseconds = document.getElementById("id_fixedDelayMilliseconds").value;
+		   		sendConfigChange("fixedDelayMilliseconds", fixedDelayMilliseconds.trim() );
+		   };
+ 		   document.getElementById('id_oldGenRequestCountThresholdForPruning_btn').onclick = function() {
+				var oldGenRequestCountThresholdForPruning = document.getElementById("id_oldGenRequestCountThresholdForPruning").value;
+		   		sendConfigChange("oldGenRequestCountThresholdForPruning", oldGenRequestCountThresholdForPruning.trim() );
+		   };
+ 		   document.getElementById('id_oldGenMaxBytes_btn').onclick = function() {
+				var oldGenMaxBytes = document.getElementById("id_oldGenMaxBytes").value;
+		   		sendConfigChange("oldGenMaxBytes", oldGenMaxBytes.trim() );
+		   };
+ 		   document.getElementById('id_oldGenMinExpirationMs_btn').onclick = function() {
+				var oldGenMinExpirationMs = document.getElementById("id_oldGenMinExpirationMs").value;
+		   		sendConfigChange("oldGenMinExpirationMs", oldGenMinExpirationMs.trim() );
+		   };
+ 		   document.getElementById('id_oldGenMaxExpirationMs_btn').onclick = function() {
+				var oldGenMaxExpirationMs = document.getElementById("id_oldGenMaxExpirationMs").value;
+		   		sendConfigChange("oldGenMaxExpirationMs", oldGenMaxExpirationMs.trim() );
+		   };
+ 		   document.getElementById('id_perfKey_btn').onclick = function() {
+				var myPerfKey = document.getElementById("id_perfKey").value;
+		   		sendConfigChange("perfKey", myPerfKey.trim() );
+		   };
+           
+           
+		   /**
+			 Bootstrap Alerts -
+			 Function Name - showalert()
+			 Inputs - message,alerttype
+			 Example - showalert("Invalid Login","alert-error")
+			 Types of alerts -- "alert-error","alert-success","alert-info","alert-warning"
+			 Required - You only need to add a alert_placeholder div in your html page wherever you want to display these alerts "<div id="alert_placeholder"></div>"
+			 Written On - 14-Jun-2013
+			 stolen from: http://stackoverflow.com/questions/10082330/dynamically-create-bootstrap-alerts-box-through-javascript
+			 see also:  http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-alerts.php
+		   **/
+
+			 function showalert(message,alerttype) {
+
+			   
+			   var foo = document.createElement('foo');
+			   foo.innerHTML = '<div id="alertdiv" class="alert fade in ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>';
+			   document.getElementById("alert_placeholder").appendChild(foo);
+
+			   setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
+
+
+				 var x = document.getElementById("alertdiv");
+				 x.parentNode.removeChild(x);
+
+			   }, 5000);
+			 }           
+
+           function sendConfigChange(variableName, variableValue) {
+					var xhr = new XMLHttpRequest();
+					lastChangeUrl="/config?"+variableName+"="+variableValue;
+					xhr.open('GET', lastChangeUrl, true);
+   
+					xhr.addEventListener("readystatechange", displayStatus, false);
+					xhr.send();
+					function displayStatus(event) {
+							if (xhr.readyState == 4 && xhr.status == 200) {
+									/* showalert("Change applied: "+lastChangeUrl,"alert-success"); */
+									cfgXml = xhr.responseXML;
+									refreshScreen();
+							}
+					}
+           }
+
+// ]]>           
+     </script>
+
+</body>
+</html>
