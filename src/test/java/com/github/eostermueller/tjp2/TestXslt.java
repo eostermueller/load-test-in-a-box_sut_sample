@@ -20,8 +20,7 @@ public class TestXslt {
 	
 	@Before
 	public void setup() {
-		String cfg1 = 	"	xsl.root/01/personnel.xml;  	xsl.root/01/simple.xsl;  		xsl.root/02/book.xml;			xsl.root/02/to-html.xsl;		xsl.root/03/sales.xml;			xsl.root/03/to-html.xsl;		xsl.root/04/sales.xml;			xsl.root/04/to-svg.xsl;			xsl.root/05/foo.xml;			xsl.root/05/foo.xsl;			xsl.root/06/birds.xml;			xsl.root/06/birds.xsl;    ";
-		xsltProcessor = new XsltProcessor(cfg1);
+		xsltProcessor = new XsltProcessor();
 		System.out.println(xsltProcessor.getHumanReadableFileList());
 	}
 	@Test

@@ -70,11 +70,6 @@
 		    <version>0.11.0</version>
 		</dependency>
 	        -->	
-		<dependency>
-		  <groupId>com.github.eostermueller</groupId>
-		  <artifactId>workload</artifactId>
-		  <version>0.0.1-SNAPSHOT</version>
-		</dependency>
 
 		
 	</dependencies>
@@ -82,6 +77,10 @@
 	<build>
 		<!-- <defaultGoal>generate-sources</defaultGoal> -->
 		<plugins>
+<plugin>
+    <groupId>pl.project13.maven</groupId>
+    <artifactId>git-commit-id-plugin</artifactId>
+</plugin>
 <plugin>
   <groupId>com.googlecode.maven-download-plugin</groupId>
   <artifactId>download-maven-plugin</artifactId>
@@ -138,7 +137,7 @@
             <configuration>
                 <classifier>spring-boot</classifier>
                 <mainClass>
-                  com.github.eostermueller.tjp2.Controller
+                  com.github.eostermueller.tjp2.WorkloadController
                 </mainClass>
             </configuration>
         </execution>
@@ -196,12 +195,12 @@
 			<!-- -XX:+UseParallelOldGC 	-->
 			<!-- -XX:+UseSerialGC 		-->
 
-			<!-- verbose GC logging -->
+			<!-- verbose GC logging 
 			<argument>-Xloggc:gc.log</argument>
 			<argument>-verbose:gc</argument>
 			<argument>-XX:+PrintGCDetails</argument>
 			<argument>-verbose:sizes</argument>
-
+			-->
 			<argument>-javaagent:${project.build.directory}/glowroot-0.11.0/glowroot/glowroot.jar</argument>
 			<!-- <argument>-javaagent:${org.glowroot:glowroot-agent:jar}</argument> -->
 			<argument>-jar</argument>

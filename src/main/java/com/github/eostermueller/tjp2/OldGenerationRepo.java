@@ -48,7 +48,6 @@ public class OldGenerationRepo implements IntegerChangeListener {
 	}
 
 	public boolean isEnabled() {
-		//System.out.println("ogr.isEnabled [" + this.ynEnabled.get() + "]");
 		return this.ynEnabled.get();
 	}
 	public void setEnabled(boolean val) {

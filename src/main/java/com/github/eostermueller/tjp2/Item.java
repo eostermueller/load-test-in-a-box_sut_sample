@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Dummy activity used to see how much 'work' can be done before seeing a performance impact
@@ -14,6 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Item {
 	static int min = 1;
 	static int max = 20;
+	private boolean optimizedUuid; 
+	int randomIntegerImplementation;
 	static AtomicInteger indexIntoRandomArray = new AtomicInteger();
 	private static Random random = new Random();
 	
@@ -39,15 +40,15 @@ public class Item {
 	 * Which of the 20 variables should we play with?
 	 * @return
 	 */
-	public static int getRandomVariableInteger(int min, int max) {
+	public int getRandomVariableInteger(int min, int max) {
 		int rc = -1;
-		switch(Controller.getConfig().getRandomIntegerImplementation()) {
+		switch(this.getRandomIntegerImplementation()) {
 		case 0:
 			rc =  random.nextInt((max - min) + 1) + min;
 			break;
 		case 1:
 			if (max > Item.myRndArry.length)
-				throw new RuntimeException("When Controller.getConfig().getRandomIntegerImplementation() ==1, max must be <= 20.  Instead was [" + max + "]");
+				throw new RuntimeException("When getRandomIntegerImplementation() ==1, max must be <= 20.  Instead was [" + max + "]");
 
 			int aryIndex = (int)  Math.abs(Item.indexIntoRandomArray.getAndIncrement()) % Item.myRndArry.length;
 			rc = Item.myRndArry[ aryIndex ];
@@ -58,6 +59,14 @@ public class Item {
 			break;
 		}
 		return rc;
+	}
+	private void setRandomIntegerImplementation(int val) {
+		this.randomIntegerImplementation = val;
+		
+	}
+	
+	private int getRandomIntegerImplementation() {
+		return this.randomIntegerImplementation;
 	}
 	public String get(int whichString) {
 		String rc =null;
@@ -369,18 +378,27 @@ public class Item {
 	String s017; 
 	String s018; 
 	String s019; 
-	String s020; 
+	String s020;
 
-	public static String getUuid() {
+	public String getUuid() {
 		UUID uuid = null;
-		if (Controller.getConfig().isUuidOptimized())
+		if (this.isUuidOptimized())
 			uuid =  new UUID(random.nextLong(), random.nextLong());
 		else
 			uuid = UUID.randomUUID();
 
 		return uuid.toString();
 	}
-	public Item() {
+	private boolean isUuidOptimized() {
+		return optimizedUuid;
+	}
+	private void setUuidOptimized(boolean val) {
+		this.optimizedUuid = val;
+	}
+	public Item(int val, boolean optimizedUuid) {
+		this.setRandomIntegerImplementation(val);
+		
+		
 		s001 = getUuid();
 		s002 = getUuid();
 		s003 = getUuid();
@@ -402,6 +420,7 @@ public class Item {
 		s019 = getUuid();
 		s020 = getUuid();
 	}
+
 	static int myRndArry[] = {
 			  3,  3, 15,  4, 16, 19,  4,  5, 19, 19, 18, 15, 11,  8,  2,  6,
 			  8, 10, 20, 10, 18,  8, 18,  3,  5, 12,  8,  8, 20, 20, 11,  1,
