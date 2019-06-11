@@ -137,7 +137,7 @@
             <configuration>
                 <classifier>spring-boot</classifier>
                 <mainClass>
-                  com.github.eostermueller.tjp2.WorkloadController
+                  com.github.eostermueller.tjp2.rest.WorkloadController
                 </mainClass>
             </configuration>
         </execution>

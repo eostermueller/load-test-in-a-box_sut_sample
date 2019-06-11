@@ -89,6 +89,7 @@ public class BusyProcessor {
 	   
 		@ProcessingUnit(
 				useCase = "busyOptimizedUuid", 
+				selected = true,
 				value = {@UserInterfaceDescription("busy - table-based Random - 10 items, 10 iterations")}
 				)
 		public void randomTableInt_10_10_optimizedUuid() {
