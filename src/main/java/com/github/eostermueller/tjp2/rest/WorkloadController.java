@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,10 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+//import com.fasterxml.jackson.databind.DeserializationFeature;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.SerializationFeature;
+//import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.eostermueller.havoc.rest.ApiResponse;
 import com.github.eostermueller.havoc.rest.Status;
 import com.github.eostermueller.havoc.workload.DefaultFactory;
@@ -82,19 +87,24 @@ public class WorkloadController implements WebMvcConfigurer {
 
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		
-		WorkloadSpecRq rq = util.unmmarshalWorkloadUpdateRq(js0n);
+		LOGGER.debug("input js0n " + js0n );
+		//WorkloadSpecRq rq = util.unmmarshalWorkloadUpdateRq(js0n);
+		UseCases rq = util.unmmarshalUseCases(js0n);
 
-		LOGGER.debug("rq.getProcessingUnits().size(): " + rq.getProcessingUnits().size() );
+		LOGGER.debug("rq.getProcessingUnits().size(): " + rq.getUseCases().size() );
 		WorkloadBuilder workloadBuilder = DefaultFactory.getFactory().createWorkloadBuilder();
 		
 		Workload w = workloadBuilder.createWorkload(rq);
 		LOGGER.debug("punits" + w.size());
 		
 		w.setVerboseState(rq);
+		LOGGER.debug("PUT#1");
 		
 		DefaultFactory.getFactory().setWorkloadSingleton(w);
+		LOGGER.debug("PUT#2");
 		
 		apiResponse.setStatus(Status.SUCCESS);
+		LOGGER.debug("PUT#3");
 		
 		return apiResponse;
 	}
@@ -105,21 +115,35 @@ public class WorkloadController implements WebMvcConfigurer {
 		    method = RequestMethod.GET)	
 	public ApiResponse getWorkload(
 			) throws HavocException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
-		
+		LOGGER.debug("GET#1");
+
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
+		
+		LOGGER.debug("GET#2");
 
 		Workload workload = DefaultFactory.getFactory().getWorkloadSingleton();
 		if (workload!=null) {
 			apiResponse.setResult( workload.getVerboseState() );
 			apiResponse.setStatus(Status.SUCCESS);
+			LOGGER.debug("GET#3");
 		} else {
 			//Perhaps ui has not started, or just not selected anything yet?
 			apiResponse.setStatus(Status.FAILURE);
+			LOGGER.debug("GET#4");
 		}
+		LOGGER.debug("GET#END:" + workload.getVerboseState().getClass().getName());
 		
 		return apiResponse;
 	}
-	
+//	@Bean
+//	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//	 MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+//	 ObjectMapper objectMapper = new ObjectMapper();
+//	 objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+//	 //objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//	 jsonConverter.setObjectMapper(objectMapper);
+//	 return jsonConverter;
+//	}	
 	@CrossOrigin(origins = "http://localhost:8090")
 	@Bean
 	@RequestMapping(
