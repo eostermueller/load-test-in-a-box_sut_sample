@@ -50,9 +50,9 @@ public class WorkloadController implements WebMvcConfigurer {
 	@Autowired
 	private ResourceLoader resourceLoader;
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	
 
 	@CrossOrigin(origins = "http://localhost:8090")
-	@Bean
 	@RequestMapping(
 		    value = "/execute",
 		    method = RequestMethod.GET)	
@@ -74,7 +74,6 @@ public class WorkloadController implements WebMvcConfigurer {
 	}
 
 	@CrossOrigin(origins = "http://localhost:8090")
-	@Bean
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.PUT)	
@@ -109,7 +108,6 @@ public class WorkloadController implements WebMvcConfigurer {
 		return apiResponse;
 	}
 	@CrossOrigin(origins = "http://localhost:8090")
-	@Bean
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.GET)	
@@ -135,17 +133,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		
 		return apiResponse;
 	}
-//	@Bean
-//	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-//	 MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-//	 ObjectMapper objectMapper = new ObjectMapper();
-//	 objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-//	 //objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//	 jsonConverter.setObjectMapper(objectMapper);
-//	 return jsonConverter;
-//	}	
 	@CrossOrigin(origins = "http://localhost:8090")
-	@Bean
 	@RequestMapping(
 		    value = "/useCases", 		    		    
 		    method = RequestMethod.GET)	

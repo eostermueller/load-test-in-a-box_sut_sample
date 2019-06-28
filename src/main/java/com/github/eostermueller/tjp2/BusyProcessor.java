@@ -15,7 +15,7 @@ import com.github.eostermueller.havoc.workload.annotations.UserInterfaceDescript
  *
  */
 public class BusyProcessor {
-	   private void busyProcessing(int countOfItems, int randomImpl, int iterations, boolean optimizedUuid) {
+	   private void busyProcessing(RandomIntegerType randomImpl, int countOfItems, int iterations, boolean optimizedUuid) {
 	    	
 	    	List<String> myList = new ArrayList<String>();
 	    	
@@ -24,7 +24,6 @@ public class BusyProcessor {
 				item.process( iterations ); //shuffle them around a bit.
 				myList.add( item.toString() ); //concatenate them into a big string
 			}
-			
 			Collections.sort(myList);
 			
 		}
@@ -33,14 +32,14 @@ public class BusyProcessor {
 				value = {@UserInterfaceDescription("busy - reuse Random - 10 items, 10 iterations")}
 				)
 		public void randomNextInt_10_10() {
-			this.busyProcessing(0, 10, 10, false);
+			this.busyProcessing(RandomIntegerType.STATIC_JAVA_UTIL_RANDOM, 10, 10, false);
 		}
 		@ProcessingUnit(
 				useCase = "busySlowUuid", 
 				value = {@UserInterfaceDescription("busy - reuse Random - 1000 items, 1000 iterations")}
 				)
 		public void randomNextInt_1000_1000() {
-			this.busyProcessing(0, 1000, 1000, false);
+			this.busyProcessing(RandomIntegerType.STATIC_JAVA_UTIL_RANDOM, 1000, 1000, false);
 		}
 	   
 		@ProcessingUnit(
@@ -48,28 +47,28 @@ public class BusyProcessor {
 				value = {@UserInterfaceDescription("busy - table-based Random - 10 items, 10 iterations")}
 				)
 		public void randomTableInt_10_10() {
-			this.busyProcessing(1, 10, 10, false);
+			this.busyProcessing(RandomIntegerType.CHEAP_RANDOM, 10, 10, false);
 		}
 		@ProcessingUnit(
 				useCase = "busySlowUuid", 
 				value = {@UserInterfaceDescription("busy - table-based Random - 1000 items, 1000 iterations")}
 				)
 		public void randomTableInt_1000_1000() {
-			this.busyProcessing(1, 1000, 1000, false);
+			this.busyProcessing(RandomIntegerType.CHEAP_RANDOM, 1000, 1000, false);
 		}
 		@ProcessingUnit(
 				useCase = "busySlowUuid", 
 				value = {@UserInterfaceDescription("busy - threadLocal Random - 10 items, 10 iterations")}
 				)
 		public void randomThreadLocalInt_10_10() {
-			this.busyProcessing(2, 10, 10, false);
+			this.busyProcessing(RandomIntegerType.THREAD_LOCAL_JAVA_UTIL_CONCURRENT_RANDOM, 10, 10, false);
 		}
 		@ProcessingUnit(
 				useCase = "busySlowUuid", 
 				value = {@UserInterfaceDescription("busy - threadLocal Random - 1000 items, 1000 iterations")}
 				)
 		public void randomThreadLocalInt_1000_1000() {
-			this.busyProcessing(2, 1000, 1000, false);
+			this.busyProcessing(RandomIntegerType.THREAD_LOCAL_JAVA_UTIL_CONCURRENT_RANDOM, 1000, 1000, false);
 		}
 /**************************************************************/
 		@ProcessingUnit(
@@ -77,14 +76,14 @@ public class BusyProcessor {
 				value = {@UserInterfaceDescription("busy - reuse Random - 10 items, 10 iterations")}
 				)
 		public void randomNextInt_10_10_optimizedUuid() {
-			this.busyProcessing(0, 10, 10, true);
+			this.busyProcessing(RandomIntegerType.STATIC_JAVA_UTIL_RANDOM, 10, 10, true);
 		}
 		@ProcessingUnit(
 				useCase = "busyOptimizedUuid", 
 				value = {@UserInterfaceDescription("busy - reuse Random - 1000 items, 1000 iterations")}
 				)
 		public void randomNextInt_1000_1000_optimizedUuid() {
-			this.busyProcessing(0, 1000, 1000, true);
+			this.busyProcessing(RandomIntegerType.STATIC_JAVA_UTIL_RANDOM, 1000, 1000, true);
 		}
 	   
 		@ProcessingUnit(
@@ -93,28 +92,28 @@ public class BusyProcessor {
 				value = {@UserInterfaceDescription("busy - table-based Random - 10 items, 10 iterations")}
 				)
 		public void randomTableInt_10_10_optimizedUuid() {
-			this.busyProcessing(1, 10, 10, true);
+			this.busyProcessing(RandomIntegerType.CHEAP_RANDOM, 10, 10, true);
 		}
 		@ProcessingUnit(
 				useCase = "busyOptimizedUuid", 
 				value = {@UserInterfaceDescription("busy - table-based Random - 1000 items, 1000 iterations")}
 				)
 		public void randomTableInt_1000_1000_optimizedUuid() {
-			this.busyProcessing(1, 1000, 1000, true);
+			this.busyProcessing(RandomIntegerType.CHEAP_RANDOM, 1000, 1000, true);
 		}
 		@ProcessingUnit(
 				useCase = "busyOptimizedUuid", 
 				value = {@UserInterfaceDescription("busy - threadLocal Random - 10 items, 10 iterations")}
 				)
 		public void randomThreadLocalInt_10_10_optimizedUuid() {
-			this.busyProcessing(2, 10, 10, true);
+			this.busyProcessing(RandomIntegerType.THREAD_LOCAL_JAVA_UTIL_CONCURRENT_RANDOM, 10, 10, true);
 		}
 		@ProcessingUnit(
 				useCase = "busyOptimizedUuid", 
 				value = {@UserInterfaceDescription("busy - threadLocal Random - 1000 items, 1000 iterations")}
 				)
 		public void randomThreadLocalInt_1000_1000_optimizedUuid() {
-			this.busyProcessing(2, 1000, 1000, true);
+			this.busyProcessing(RandomIntegerType.THREAD_LOCAL_JAVA_UTIL_CONCURRENT_RANDOM, 1000, 1000, true);
 		}
 		
 }

@@ -14,7 +14,7 @@ public class Item {
 	static int min = 1;
 	static int max = 20;
 	private boolean optimizedUuid; 
-	int randomIntegerImplementation;
+	RandomIntegerType randomIntegerType;
 	static AtomicInteger indexIntoRandomArray = new AtomicInteger();
 	private static Random random = new Random();
 	
@@ -42,11 +42,11 @@ public class Item {
 	 */
 	public int getRandomVariableInteger(int min, int max) {
 		int rc = -1;
-		switch(this.getRandomIntegerImplementation()) {
-		case 0:
+		switch(this.getRandomNumberType()) {
+		case STATIC_JAVA_UTIL_RANDOM:
 			rc =  random.nextInt((max - min) + 1) + min;
 			break;
-		case 1:
+		case CHEAP_RANDOM:
 			if (max > Item.myRndArry.length)
 				throw new RuntimeException("When getRandomIntegerImplementation() ==1, max must be <= 20.  Instead was [" + max + "]");
 
@@ -54,19 +54,19 @@ public class Item {
 			rc = Item.myRndArry[ aryIndex ];
 			break;
 			//Todo:  expose '2' as an option
-		case 2:
+		case THREAD_LOCAL_JAVA_UTIL_CONCURRENT_RANDOM:
 			rc = ThreadLocalRandom.current().nextInt(max);
 			break;
 		}
 		return rc;
 	}
-	private void setRandomIntegerImplementation(int val) {
-		this.randomIntegerImplementation = val;
+	private void setRandomIntegerImplementation(RandomIntegerType val) {
+		this.randomIntegerType = val;
 		
 	}
 	
-	private int getRandomIntegerImplementation() {
-		return this.randomIntegerImplementation;
+	private RandomIntegerType getRandomNumberType() {
+		return this.randomIntegerType;
 	}
 	public String get(int whichString) {
 		String rc =null;
@@ -395,7 +395,7 @@ public class Item {
 	private void setUuidOptimized(boolean val) {
 		this.optimizedUuid = val;
 	}
-	public Item(int val, boolean optimizedUuid) {
+	public Item(RandomIntegerType val, boolean optimizedUuid) {
 		this.setRandomIntegerImplementation(val);
 		
 		
