@@ -11,7 +11,7 @@
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-parent</artifactId>
         	<!--   <version>2.0.5.RELEASE</version>  -->
-        	<version>2.1.1.RELEASE</version>
+        	<version>2.1.6.RELEASE</version>
 	</parent>
 
 	<properties>
@@ -25,13 +25,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+<!--
 			    <exclusions>
 				<exclusion>
 				    <groupId>org.springframework.boot</groupId>
 				    <artifactId>spring-boot-starter-json</artifactId>
 				</exclusion>
 			    </exclusions>
-
+-->
 		</dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -51,6 +52,19 @@
 		     <artifactId>spring-boot-starter-test</artifactId>
 		     <scope>test</scope>
 		 </dependency>
+		<dependency>
+		    <groupId>com.jayway.jsonpath</groupId>
+		    <artifactId>json-path</artifactId>
+		    <version>2.4.0</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>com.jayway.jsonpath</groupId>
+		    <artifactId>json-path-assert</artifactId>
+		    <version>2.4.0</version>
+		    <scope>test</scope>
+		</dependency>
+
 		 <dependency>
 		     <groupId>org.junit.jupiter</groupId>
 		     <artifactId>junit-jupiter-api</artifactId>
@@ -114,6 +128,9 @@
 <plugin>
     <groupId>pl.project13.maven</groupId>
     <artifactId>git-commit-id-plugin</artifactId>
+     <configuration>
+                <failOnNoGitDirectory>false</failOnNoGitDirectory>
+     </configuration>
 </plugin>
 <plugin>
   <groupId>com.googlecode.maven-download-plugin</groupId>
