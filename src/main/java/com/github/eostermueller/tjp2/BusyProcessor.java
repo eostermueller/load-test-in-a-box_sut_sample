@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.eostermueller.havoc.workload.annotations.ProcessingUnit;
-import com.github.eostermueller.havoc.workload.annotations.UserInterfaceDescription;
+import com.github.eostermueller.snail4j.workload.annotations.ProcessingUnit;
+import com.github.eostermueller.snail4j.workload.annotations.UserInterfaceDescription;
 
 /**
  * 

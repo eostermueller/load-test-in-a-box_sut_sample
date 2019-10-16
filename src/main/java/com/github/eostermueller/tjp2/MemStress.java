@@ -2,8 +2,8 @@ package com.github.eostermueller.tjp2;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.github.eostermueller.havoc.workload.annotations.ProcessingUnit;
-import com.github.eostermueller.havoc.workload.annotations.UserInterfaceDescription;
+import com.github.eostermueller.snail4j.workload.annotations.ProcessingUnit;
+import com.github.eostermueller.snail4j.workload.annotations.UserInterfaceDescription;
 import com.github.eostermueller.tjp2.OldGenerationRepo.OldGenerationData;
 
 public class MemStress {

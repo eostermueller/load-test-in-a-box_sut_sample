@@ -16,8 +16,8 @@ import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.xml.sax.InputSource;
 
-import com.github.eostermueller.havoc.workload.annotations.ProcessingUnit;
-import com.github.eostermueller.havoc.workload.annotations.UserInterfaceDescription;
+import com.github.eostermueller.snail4j.workload.annotations.ProcessingUnit;
+import com.github.eostermueller.snail4j.workload.annotations.UserInterfaceDescription;
 
 
 /**

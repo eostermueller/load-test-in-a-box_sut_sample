@@ -1,7 +1,7 @@
 package com.github.eostermueller.tjp2;
 
-import com.github.eostermueller.havoc.workload.annotations.ProcessingUnit;
-import com.github.eostermueller.havoc.workload.annotations.UserInterfaceDescription;
+import com.github.eostermueller.snail4j.workload.annotations.ProcessingUnit;
+import com.github.eostermueller.snail4j.workload.annotations.UserInterfaceDescription;
 
 public class SleepDelay {
 	/*
