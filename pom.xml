@@ -25,28 +25,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-<!--
-			    <exclusions>
-				<exclusion>
-				    <groupId>org.springframework.boot</groupId>
-				    <artifactId>spring-boot-starter-json</artifactId>
-				</exclusion>
-			    </exclusions>
--->
 		</dependency>
+<!--
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
         </dependency>
+  -->
 
-<!--	
-		<dependency>
-	    		<groupId>junit</groupId>
-	    		<artifactId>junit</artifactId>
-	    		<version>4.12</version>
-		</dependency>
--->
 		 <dependency>
 		     <groupId>org.springframework.boot</groupId>
 		     <artifactId>spring-boot-starter-test</artifactId>
@@ -107,52 +94,13 @@
 		</dependency>
 		
 	
-		<!-- https://mvnrepository.com/artifact/org.glowroot/glowroot-agent 
-		<dependency>
-		    <groupId>org.glowroot</groupId>
-		    <artifactId>glowroot-agent</artifactId>
-		    <version>0.11.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-                -->
 		
 	</dependencies>
 
 	<build>
 		<!-- <defaultGoal>generate-sources</defaultGoal> -->
 		<plugins>
-<plugin>
-    <groupId>pl.project13.maven</groupId>
-    <artifactId>git-commit-id-plugin</artifactId>
-     <configuration>
-                <failOnNoGitDirectory>false</failOnNoGitDirectory>
-     </configuration>
-</plugin>
-<plugin>
-  <groupId>com.googlecode.maven-download-plugin</groupId>
-  <artifactId>download-maven-plugin</artifactId>
-  <version>1.3.0</version>
-  <executions>
-    <execution>
-      <!-- the wget goal actually binds itself to this phase by default -->
-      <phase>process-resources</phase>
-      <goals>
-        <goal>wget</goal>
-      </goals>
-      <configuration>
-        <url>https://github.com/glowroot/glowroot/releases/download/v0.11.0/glowroot-0.11.0-dist.zip</url>
-        <unpack>true</unpack>
-        <outputFileName>glowroot-0.11.0-dist.zip</outputFileName>
-        <!-- default target location, just to demonstrate the parameter -->
-        <outputDirectory>${project.build.directory}/glowroot-0.11.0</outputDirectory>
-      </configuration>
-    </execution>
-  </executions>
-</plugin>
+
 
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
