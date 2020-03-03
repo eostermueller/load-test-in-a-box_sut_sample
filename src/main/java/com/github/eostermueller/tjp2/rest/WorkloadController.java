@@ -106,21 +106,18 @@ public class WorkloadController implements WebMvcConfigurer {
 		LOGGER.debug("GET#1");
 
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
+		apiResponse.setStatus(Status.FAILURE); //assume the worst
 		
 		LOGGER.debug("GET#2");
 
 		Workload workload = DefaultFactory.getFactory().getWorkloadSingleton();
+		apiResponse.setStatus(Status.SUCCESS);
 		if (workload!=null) {
 			apiResponse.setResult( workload.getVerboseState() );
-			apiResponse.setStatus(Status.SUCCESS);
 			LOGGER.debug("GET#3");
-		} else {
-			//Perhaps ui has not started, or just not selected anything yet?
-			apiResponse.setStatus(Status.FAILURE);
-			LOGGER.debug("GET#4");
 		}
-		LOGGER.debug("GET#END:" + workload.getVerboseState().getClass().getName());
 		
+		apiResponse.setNanoStop( System.nanoTime() );
 		return apiResponse;
 	}
 	@CrossOrigin(origins = "http://localhost:8090")
