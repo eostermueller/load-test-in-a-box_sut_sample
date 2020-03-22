@@ -43,7 +43,7 @@ public class WorkloadController implements WebMvcConfigurer {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 
-	@CrossOrigin(origins = "http://localhost:8090")
+	@CrossOrigin /*(origins = "http://localhost:8090")*/
 	@RequestMapping(
 		    value = "/execute",
 		    method = RequestMethod.GET)	
@@ -64,7 +64,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		return apiResponse;
 	}
 
-	@CrossOrigin(origins = "http://localhost:8090")
+	@CrossOrigin /*(origins = "http://localhost:8090")*/
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.PUT)	
@@ -97,7 +97,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		
 		return apiResponse;
 	}
-	@CrossOrigin(origins = "http://localhost:8090")
+	@CrossOrigin /*(origins = "http://localhost:8090")*/
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.GET)	
@@ -120,7 +120,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		apiResponse.setNanoStop( System.nanoTime() );
 		return apiResponse;
 	}
-	@CrossOrigin(origins = "http://localhost:8090")
+	@CrossOrigin /* (origins = "http://localhost:8090") */
 	@RequestMapping(
 		    value = "/useCases", 		    		    
 		    method = RequestMethod.GET)	
