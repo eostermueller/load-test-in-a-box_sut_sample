@@ -29,8 +29,21 @@ import com.github.eostermueller.tjp2.dataaccess_5.PkInquiry;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariConfig;
 
+/**
+ * The JDBC url (for this class's DataSources) and wiremock URL are specified in -D parameters, ones specified by snail4j
+ * @author eoste
+ *
+ */
 public class AppContext implements InitializingBean, ApplicationListener<ContextRefreshedEvent>, Logger {
 	public static final long NUM_ACCOUNTS = 10;
+
+	private static final String H2_PORT_JAVA_SYS_PROP_NAME = "snail4j.h2.port"; //
+	
+	private static final String WIREMOCK_PORT_JAVA_SYS_PROP_NAME = "snail4j.wiremock.port"; //
+
+	private static final String WIREMOCK_HOST_JAVA_SYS_PROP_NAME = "snail4j.wiremock.hostname";
+
+	private static final String H2_HOST_JAVA_SYS_PROP_NAME = "snail4j.h2.hostname";
 
 	public static AppContext SINGLETON = new AppContext();
 	
@@ -135,13 +148,65 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	private ListInquiry m_listInquiry_3 = null;
 
 	private AtomicBoolean m_logSql = new AtomicBoolean(false);
+
+	public String getWiremockBaseUrl() {
+		String url = "http://"  
+				+ this.getWiremockHostname()
+				+ ":"
+				+ this.getWiremockPort()
+				+ "/";
+		return url;
+	}
+	public int getWiremockPort() {
+			String strPortVal = System.getProperty(WIREMOCK_PORT_JAVA_SYS_PROP_NAME);
+			return Integer.parseInt(strPortVal);
+	}
 	
+	public int getH2Port() {
+		String strPortVal = System.getProperty(H2_PORT_JAVA_SYS_PROP_NAME);
+		return Integer.parseInt(strPortVal);
+}
+	public String getWiremockHostname() {
+		return System.getProperty(WIREMOCK_HOST_JAVA_SYS_PROP_NAME);
+	}
+	public String getH2Hostname() {
+		return System.getProperty(H2_HOST_JAVA_SYS_PROP_NAME);
+	}
+	/**
+	 * Build using parameters documented here:
+	 * <pre>https://github.com/brettwooldridge/HikariCP</pre>
+	 * @param port the tcp port number H2 was launched on
+	 * @param schema the SCHEMA of the H2 database. (S01 and S02) are valid values for snail4j, as of april 5, 2020.
+	 * @return
+	 */
+	private HikariConfig getHikariConfig(int port, String h2Hostname, String schema) {
+		String jdbcUrl = "jdbc:h2:tcp://" + h2Hostname + ":" + port + "/perfSandboxDb;SCHEMA=" + schema + ";AUTO_SERVER=TRUE";
+
+		HikariConfig config = new HikariConfig();
+		config.setIdleTimeout(42000);
+		config.setJdbcUrl(jdbcUrl);
+		config.setDriverClassName("org.h2.Driver");
+		return config;
+	}
+	/**
+	 * "S01" and "S02" are the two schemas that get populated using these instructions:
+	 *  https://github.com/eostermueller/javaPerformanceTroubleshooting/wiki/Install-and-Run#step-2-run-the-one-time-init-script
+	 *  ...and the init.sh script described there must be run as a prerequisite for building the snail4j uber jar.
+	 *  
+	 *  FYI, the following two jmeter files are used to populate these two schemas:
+	 *  
+	 * https://github.com/eostermueller/javaPerformanceTroubleshooting/blob/master/src/test/jmeter/loadDb-01.jmx
+	 * https://github.com/eostermueller/javaPerformanceTroubleshooting/blob/master/src/test/jmeter/loadDb-02.jmx
+	 */
 	private void initDataSources() {
-	    HikariConfig config = new HikariConfig("/hikari01.properties");
+	    //HikariConfig config = new HikariConfig("/hikari01.properties");
+		
+		HikariConfig config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), "S01");
+	    
  	    this.dataSource01 = new HikariDataSource(config);
 	    log("Hikari JdbcUrl 01 [" + config.getJdbcUrl() + "]");
 
-	    config = new HikariConfig("/hikari02.properties");
+	    config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), "S02");
  	    this.dataSource02 = new HikariDataSource(config);
 	    log("Hikari JdbcUrl 02 [" + config.getJdbcUrl() + "]");
 	}
