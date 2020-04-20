@@ -50,7 +50,7 @@ public class AccountMgr2 implements BaseManager {
 	}
 
 	@Load(
-			useCase = "chunkyVersusChattySql", 
+			useCase = "01_Persistence_chunkyVersusChattySql", 
 			value = {@UserInterfaceDescription("AccountMgr2")}
 			)
 	public Accounts getAccounts_bulkAccountBulkTransInq() throws PerfSandboxException {

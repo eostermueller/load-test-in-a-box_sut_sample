@@ -32,7 +32,7 @@ public class AccountMgr6 implements BaseManager {
 	}
 
 	@Load(
-			useCase = "chunkyVersusChattySql", 
+			useCase = "01_Persistence_chunkyVersusChattySql", 
 			value = {@UserInterfaceDescription("AccountMgr6")}
 			)
 	public Accounts getAccounts_zeroDbAccess() throws PerfSandboxException {

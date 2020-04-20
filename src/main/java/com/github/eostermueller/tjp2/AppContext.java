@@ -55,10 +55,6 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	public int getFileSystemReadCount() {
 		return this.readDataCount;
 	}
-	private HttpServer httpServer = new HttpServer();
-	public HttpServer getHttpServer() {
-		return this.httpServer;
-	}
 	private BranchInquiry branchInquiry = null;
 	public AtomicBoolean backendStarted = new AtomicBoolean(false);
 	
@@ -153,8 +149,7 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 		String url = "http://"  
 				+ this.getWiremockHostname()
 				+ ":"
-				+ this.getWiremockPort()
-				+ "/";
+				+ this.getWiremockPort();
 		return url;
 	}
 	public int getWiremockPort() {

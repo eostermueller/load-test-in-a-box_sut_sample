@@ -47,7 +47,7 @@ public class AccountMgr4  implements BaseManager {
 		
 	}
 	@Load(
-			useCase = "chunkyVersusChattySql", 
+			useCase = "01_Persistence_chunkyVersusChattySql", 
 			value = {@UserInterfaceDescription("AccountMgr4")}
 			)
 	public Accounts getAccounts4_oneInqPerAccount() throws PerfSandboxException {

@@ -39,7 +39,7 @@ public class AccountMgr5 implements BaseManager {
 	}
 
 	@Load(
-			useCase = "chunkyVersusChattySql", 
+			useCase = "01_Persistence_chunkyVersusChattySql", 
 			value = {@UserInterfaceDescription("AccountMgr5")}
 			)
 	public Accounts getAccounts_pkInqForHistory() throws PerfSandboxException {

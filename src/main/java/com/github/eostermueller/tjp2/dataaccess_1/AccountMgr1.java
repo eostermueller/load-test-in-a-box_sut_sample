@@ -71,7 +71,7 @@ public class AccountMgr1 implements BaseManager {
 	}
 
 	@Load(
-			useCase = "chunkyVersusChattySql", 
+			useCase = "01_Persistence_chunkyVersusChattySql", 
 			value = {@UserInterfaceDescription("AccountMgr1")}
 			)
 	public Accounts getAccounts_joinToHistoryTable() throws PerfSandboxException {
