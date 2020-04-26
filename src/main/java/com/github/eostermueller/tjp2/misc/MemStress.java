@@ -8,56 +8,106 @@ import com.github.eostermueller.tjp2.misc.OldGenerationRepo.OldGenerationData;
 
 public class MemStress {
 	private final int ONE_MB = 1000000;
-	private int oldGenMinExpirationMs = 0; 
-	private int oldGenMaxExpirationMs = 60000; //set expirations time stamps that are System.currentTimeMillis() + random value, with this variable as the max.
-	private int oldGenMaxBytes = 1024; //at most, add this many bytes to the old gen repository.
+	private int oldGenExpirationMs = 0; 
+	private int oldGenChunkSizeBytes = 1024; //at most, add this many bytes to the old gen repository.
 	private int oldGenRequestCountThresholdForPruning = 10;
 	private IntegerChangeListener oldGenRequestCountThresholdForPruning_changeListener;
 	
+	/**
+	 * 
+	 */
+	
 	public MemStress() {
-		this.setOldGenRepo( new OldGenerationRepo() );
 		setOldGenRequestCountThresholdForPruning_changeListener(this.getOldGenRepo());
 	}
 	
 	@Load(
-			useCase = "memStress", 
-			value = {@UserInterfaceDescription("every rq adds 1mb that stays in memory for no more than 60 seconds")}
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 10k that stays in memory for no more than 5 minutes")}
 			)
-	public void memStress_1mb_lasts_60sec() {
-		this.setOldGenMaxBytes(ONE_MB);
-		this.setOldGenMinExpirationMs(60000);
+	public void memStress_5min_10k() {
+		this.setOldGenChunkSizeBytes(10000);
+		this.setOldGenExpirationMs(300000);
 		oldGenProcessing();
 	}
 	@Load(
-			useCase = "memStress", 
-			value = {@UserInterfaceDescription("every rq adds 10mb that stays in memory for no more than 60 seconds")}
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 100k that stays in memory for no more than 5 minutes")}
 			)
-	public void memStress_10mb_lasts_60sec() {
-		this.setOldGenMaxBytes(10*ONE_MB);
-		this.setOldGenMinExpirationMs(60000);
+	public void memStress_5min_100k() {
+		this.setOldGenChunkSizeBytes(100000);
+		this.setOldGenExpirationMs(300000);
 		oldGenProcessing();
 	}
 	@Load(
-			useCase = "memStress", 
-			value = {@UserInterfaceDescription("every rq adds 10k that stays in memory for no more than 5 min")}
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 1mb that stays in memory for no more than 5 minutes")}
 			)
-	public void memStress_10k_lasts_5min() {
-		this.setOldGenMaxBytes(10000);
-		this.setOldGenMinExpirationMs(300000);
+	public void memStress_5min_1mb() {
+		this.setOldGenChunkSizeBytes(ONE_MB);
+		this.setOldGenExpirationMs(300000);
 		oldGenProcessing();
 	}
 	@Load(
-			useCase = "memStress", 
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 10mb that stays in memory for no more than 5 minutes")}
+			)
+	public void memStress_5min_10mb() {
+		this.setOldGenChunkSizeBytes(10*ONE_MB);
+		this.setOldGenExpirationMs(300000);
+		oldGenProcessing();
+	}
+	@Load(
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 1 byte that stays in memory for no more than 60 seconds")}
+			)
+	public void memStress_60sec_1byte() {
+		this.setOldGenChunkSizeBytes(1);
+		this.setOldGenExpirationMs(60000);
+		oldGenProcessing();
+	}
+	@Load(
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 10k that stays in memory for no more than 60 seconds")}
+			)
+	public void memStress_60sec_10k() {
+		this.setOldGenChunkSizeBytes(10000);
+		this.setOldGenExpirationMs(60000);
+		oldGenProcessing();
+	}
+	@Load(
+			useCase = "04_Heap_memStress", 
 			value = {@UserInterfaceDescription("every rq adds 100k that stays in memory for no more than 60 sec")}
 			)
-	public void memStress_100k_lasts_60sec() {
-		this.setOldGenMaxBytes(100000);
-		this.setOldGenMinExpirationMs(60000);
+	public void memStress_60sec_100k() {
+		this.setOldGenChunkSizeBytes(100000);
+		this.setOldGenExpirationMs(60000);
 		oldGenProcessing();
 	}
+	@Load(
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 1mb that stays in memory for no more than 60 seconds")}
+			)
+	public void memStress_60sec_1mb() {
+		this.setOldGenChunkSizeBytes(ONE_MB);
+		this.setOldGenExpirationMs(60000);
+		oldGenProcessing();
+	}
+	@Load(
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("every rq adds 10mb that stays in memory for no more than 60 seconds")}
+			)
+	public void memStress_60sec_10mb() {
+		this.setOldGenChunkSizeBytes(10*ONE_MB);
+		this.setOldGenExpirationMs(60000);
+		oldGenProcessing();
+	}
+	
 	private void oldGenProcessing() {
 		
-		OldGenerationData data = createData(); //somewhat randomized expiration time is encoded inside created object.
+		OldGenerationData data = new OldGenerationData( 
+				System.currentTimeMillis()+getOldGenExpirationMs(), 
+				getOldGenChunkSizeBytes() );
 		
 		getOldGenRepo().maybeAdd(data);				//only adds if enabled flag is set.
 		
@@ -67,30 +117,22 @@ public class MemStress {
 	}
 	
 	public OldGenerationRepo getOldGenRepo() {
-		return oldGenRepo;
+		return OldGenerationRepo.INSTANCE;
 	}
-	public void setOldGenRepo(OldGenerationRepo oldGenRepo) {
-		this.oldGenRepo = oldGenRepo;
-	}
-	OldGenerationRepo oldGenRepo = null; 
+	@Load(
+			useCase = "04_Heap_memStress", 
+			value = {@UserInterfaceDescription("immediately deallocates this test's allocations.")}
+			)
 	public void clearOldGen() {
 		this.getOldGenRepo().clear();
     }
-	public int getOldGenMaxExpirationMs() {
-		return this.oldGenMaxExpirationMs;
+	public int getOldGenChunkSizeBytes() {
+		return oldGenChunkSizeBytes;
 	}
-	public void setOldGenMaxExpirationMs(Integer val) {
-		if (val != null) {
-			this.oldGenMaxExpirationMs = val;
-		}
-	}
-	public int getOldGenMaxBytes() {
-		return oldGenMaxBytes;
-	}
-	public void setOldGenMaxBytes(Integer val) {
+	public void setOldGenChunkSizeBytes(Integer val) {
 		
 		if (val != null) {
-			this.oldGenMaxBytes = val;
+			this.oldGenChunkSizeBytes = val;
 		}
 	}
 	
@@ -110,24 +152,13 @@ public class MemStress {
 				this.getOldGenRequestCountThresholdForPruning_changeListener().newValue(val);
 		}
 	}
-	public int getOldGenMinExpirationMs() {
-		return oldGenMinExpirationMs;
+	public int getOldGenExpirationMs() {
+		return oldGenExpirationMs;
 	}
-	public void setOldGenMinExpirationMs(Integer val) {
+	public void setOldGenExpirationMs(Integer val) {
 		if (val != null) {
-			this.oldGenMinExpirationMs = val;
+			this.oldGenExpirationMs = val;
 		}
-	}
-	public OldGenerationData createData() {
-		
-		long expirationForOldGenBytes = System.currentTimeMillis()+
-				ThreadLocalRandom.current().nextInt( getOldGenMinExpirationMs(), getOldGenMaxExpirationMs() );
-
-		int oldGenBytesToCreate = ThreadLocalRandom.current().nextInt( getOldGenMaxBytes() );
-
-		OldGenerationData data = new OldGenerationData( expirationForOldGenBytes, oldGenBytesToCreate );
-		
-		return data;
 	}
 
 }

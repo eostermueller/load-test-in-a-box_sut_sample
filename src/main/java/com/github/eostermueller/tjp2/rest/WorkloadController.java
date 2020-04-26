@@ -43,14 +43,14 @@ public class WorkloadController implements WebMvcConfigurer {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 
-	@CrossOrigin /*(origins = "http://localhost:8090")*/
+	@CrossOrigin 
 	@RequestMapping(
 		    value = "/execute",
 		    method = RequestMethod.GET)	
 	public ApiResponse execute() throws Snail4jWorkloadException, WorkloadInvocationException {
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
 
-		LOGGER.error("in /workload");
+		LOGGER.debug("in /workload");
 		
 		Workload workload = DefaultFactory.getFactory().getWorkloadSingleton();
 		
@@ -64,7 +64,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		return apiResponse;
 	}
 
-	@CrossOrigin /*(origins = "http://localhost:8090")*/
+	@CrossOrigin 
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.PUT)	
@@ -97,19 +97,16 @@ public class WorkloadController implements WebMvcConfigurer {
 		
 		return apiResponse;
 	}
-	@CrossOrigin /*(origins = "http://localhost:8090")*/
+	@CrossOrigin 
 	@RequestMapping(
 		    value = "/workload", 		    		    
 		    method = RequestMethod.GET)	
 	public ApiResponse getWorkload(
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
-		LOGGER.debug("GET#1");
 
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
 		apiResponse.setStatus(Status.FAILURE); //assume the worst
 		
-		LOGGER.debug("GET#2");
-
 		Workload workload = DefaultFactory.getFactory().getWorkloadSingleton();
 		apiResponse.setStatus(Status.SUCCESS);
 		if (workload!=null) {
@@ -118,9 +115,10 @@ public class WorkloadController implements WebMvcConfigurer {
 		}
 		
 		apiResponse.setNanoStop( System.nanoTime() );
+		LOGGER.debug("getWorkload() apiResponse: " + apiResponse.toString() );
 		return apiResponse;
 	}
-	@CrossOrigin /* (origins = "http://localhost:8090") */
+	@CrossOrigin 
 	@RequestMapping(
 		    value = "/useCases", 		    		    
 		    method = RequestMethod.GET)	

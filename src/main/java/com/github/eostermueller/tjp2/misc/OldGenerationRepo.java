@@ -10,15 +10,26 @@ import java.util.concurrent.atomic.AtomicLong;
 /**  Queue of variable-sized memory allocations, all kept with an expiration dates.
   *  The consumer adds the allocations and periodically calls the maybePrune() method
   *  that discards allocations that are past the expiration date.
-  *  This is intended to simulate the ebb and flow of "Old Generation" memory consumption of online web applications.
+  *  This is intended to (very loosely) simulate the ebb and flow of users' session state activity in online web applications.
+  *  Session state memory that lasts more than a few minutes generally gets stored in the old gen portion of the heap. 
+  *   
   */
 public class OldGenerationRepo implements IntegerChangeListener {
+	public static OldGenerationRepo INSTANCE = new OldGenerationRepo(10, true); 
+	
 	AtomicBoolean ynEnabled = new AtomicBoolean(false);
 	
 	AtomicLong currentCount = new AtomicLong(0);
 	Queue<OldGenerationData> allOldGenData = new LinkedBlockingQueue<OldGenerationData>();
 
 	private long oldGenRequestCountThresholdForPruning;
+	
+	/**
+	 * Yes, yes, I know.  This should be private to be a proper singleton.
+	 * But I made it public so I could have a unit test, TestOldGenerationRepo.
+	 * @param l
+	 * @param enabled
+	 */
 	public OldGenerationRepo(long l, boolean enabled) {
 		this();
 		this.setOldGenRequestCountThresholdForPruning( l );
