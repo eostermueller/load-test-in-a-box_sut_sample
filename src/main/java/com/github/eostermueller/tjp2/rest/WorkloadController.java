@@ -1,5 +1,7 @@
 package com.github.eostermueller.tjp2.rest;
 
+import java.util.Comparator;
+
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
@@ -29,6 +31,7 @@ import com.github.eostermueller.snail4j.workload.engine.Workload;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadBuilder;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadInvocationException;
 import com.github.eostermueller.snail4j.workload.model.Snail4jLibrary;
+import com.github.eostermueller.snail4j.workload.model.UseCase;
 import com.github.eostermueller.snail4j.workload.model.UseCases;
 import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 
@@ -125,7 +128,15 @@ public class WorkloadController implements WebMvcConfigurer {
 	public String useCases() throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
 		
 		long nanoStart = System.nanoTime();
-		UseCases useCases = Snail4jLibrary.scan();  
+		UseCases useCases = Snail4jLibrary.scan();
+		Comparator<UseCase> c = new Comparator<UseCase>() {
+			@Override
+			public int compare(UseCase o1, UseCase o2) {
+				return o1.getName().compareToIgnoreCase( o2.getName() );
+			}
+		};
+		
+		useCases.sort(c);
 
 		long nanoStop = System.nanoTime();
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
