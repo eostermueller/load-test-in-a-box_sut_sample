@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -125,10 +126,14 @@ public class WorkloadController implements WebMvcConfigurer {
 	@RequestMapping(
 		    value = "/useCases", 		    		    
 		    method = RequestMethod.GET)	
-	public String useCases() throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
+	public String useCases(
+			@RequestParam String useCaseSearchCriteria
+			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
 		
 		long nanoStart = System.nanoTime();
-		UseCases useCases = Snail4jLibrary.scan();
+		LOGGER.debug("About to call ClassGraph to search for [" + useCaseSearchCriteria + "]");
+		UseCases useCases = Snail4jLibrary.scan(useCaseSearchCriteria);
+		LOGGER.debug("Finished call ClassGraph");
 		Comparator<UseCase> c = new Comparator<UseCase>() {
 			@Override
 			public int compare(UseCase o1, UseCase o2) {
@@ -136,12 +141,14 @@ public class WorkloadController implements WebMvcConfigurer {
 			}
 		};
 		
+		LOGGER.debug("Before UseCase sort");
 		useCases.sort(c);
+		LOGGER.debug("After UseCase sort");
 
 		long nanoStop = System.nanoTime();
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		String json = util.marshalUseCases(useCases);
-		
+		LOGGER.debug("leaving WorkloadController.useCases()");
 		return json;
 	}
 	
