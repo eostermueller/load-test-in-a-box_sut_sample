@@ -175,7 +175,7 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	 * @return
 	 */
 	private HikariConfig getHikariConfig(int port, String h2Hostname, String schema) {
-		String jdbcUrl = "jdbc:h2:tcp://" + h2Hostname + ":" + port + "/perfSandboxDb;SCHEMA=" + schema + ";AUTO_SERVER=TRUE";
+		String jdbcUrl = "jdbc:h2:tcp://" + h2Hostname + ":" + port + "/./perfSandboxDb;SCHEMA=" + schema + ";AUTO_SERVER=TRUE";
 
 		HikariConfig config = new HikariConfig();
 		config.setIdleTimeout(42000);
