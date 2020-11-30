@@ -24,10 +24,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.github.eostermueller.snail4j.workload.ApiResponse;
+import com.github.eostermueller.snail4j.workload.DecryptionException;
 import com.github.eostermueller.snail4j.workload.DefaultFactory;
 import com.github.eostermueller.snail4j.workload.Snail4jWorkloadException;
 import com.github.eostermueller.snail4j.workload.OnlyStringAndLongAndIntAreAllowedParameterTypes;
 import com.github.eostermueller.snail4j.workload.Status;
+import com.github.eostermueller.snail4j.workload.WorkloadDecryptor;
 import com.github.eostermueller.snail4j.workload.engine.Workload;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadBuilder;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadInvocationException;
@@ -74,7 +76,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		    method = RequestMethod.PUT)	
 	public ApiResponse updateWorkload(
 			@RequestBody String js0n
-			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
+			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes, DecryptionException {
 		
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
 		
@@ -82,9 +84,22 @@ public class WorkloadController implements WebMvcConfigurer {
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		
 		LOGGER.debug("input js0n " + js0n );
+		System.out.println("input js0n " + js0n );
 		UseCases rq = util.unmmarshalUseCases(js0n);
+		
+		if (rq.getEncryptedKey()!=null && rq.getEncryptedKey().length()>0) {
+			System.out.println(String.format("Found encrypted key: %s",rq.getEncryptedKey() ));
+			
+			WorkloadDecryptor wd = DefaultFactory.getFactory().getWorkloadDecryptor();
+			
+			String plainTextWorkloadJson = wd.getDecryptedWorkload(DefaultFactory.getConfigLocation(), rq.getEncryptedKey() );
+			System.out.println(String.format("decrypted key: %s",plainTextWorkloadJson ));
+			LOGGER.debug(String.format("zipped and decompressed: %s", plainTextWorkloadJson));
+			rq = util.unmmarshalUseCases(plainTextWorkloadJson);
+		}
 
 		LOGGER.debug("rq.getProcessingUnits().size(): " + rq.getUseCases().size() );
+		System.out.println("rq.getProcessingUnits().size(): " + rq.getUseCases().size() );
 		WorkloadBuilder workloadBuilder = DefaultFactory.getFactory().createWorkloadBuilder();
 		
 		Workload w = workloadBuilder.createWorkload(rq);
@@ -99,8 +114,12 @@ public class WorkloadController implements WebMvcConfigurer {
 		apiResponse.setStatus(Status.SUCCESS);
 		LOGGER.debug("PUT#3");
 		
+		apiResponse.setNanoStop( System.nanoTime() );
+		System.out.println("PUT#3");
+		
 		return apiResponse;
 	}
+	
 	@CrossOrigin 
 	@RequestMapping(
 		    value = "/workload", 		    		    
