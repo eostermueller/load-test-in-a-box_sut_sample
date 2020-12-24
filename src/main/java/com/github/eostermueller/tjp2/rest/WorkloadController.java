@@ -24,18 +24,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.github.eostermueller.snail4j.workload.ApiResponse;
-import com.github.eostermueller.snail4j.workload.DecryptionException;
 import com.github.eostermueller.snail4j.workload.DefaultFactory;
 import com.github.eostermueller.snail4j.workload.Snail4jWorkloadException;
 import com.github.eostermueller.snail4j.workload.OnlyStringAndLongAndIntAreAllowedParameterTypes;
 import com.github.eostermueller.snail4j.workload.Status;
-import com.github.eostermueller.snail4j.workload.WorkloadDecryptor;
+import com.github.eostermueller.snail4j.workload.crypto.DecryptionException;
+import com.github.eostermueller.snail4j.workload.crypto.WorkloadCrypto;
 import com.github.eostermueller.snail4j.workload.engine.Workload;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadBuilder;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadInvocationException;
 import com.github.eostermueller.snail4j.workload.model.Snail4jLibrary;
 import com.github.eostermueller.snail4j.workload.model.UseCase;
 import com.github.eostermueller.snail4j.workload.model.UseCases;
+import com.github.eostermueller.snail4j.workload.model.WorkloadSpecRq;
 import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 
 @RequestMapping("/traffic")
@@ -84,16 +85,15 @@ public class WorkloadController implements WebMvcConfigurer {
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		
 		LOGGER.debug("input js0n " + js0n );
-		System.out.println("input js0n " + js0n );
 		UseCases rq = util.unmmarshalUseCases(js0n);
 		
 		if (rq.getEncryptedKey()!=null && rq.getEncryptedKey().length()>0) {
 			System.out.println(String.format("Found encrypted key: %s",rq.getEncryptedKey() ));
 			
-			WorkloadDecryptor wd = DefaultFactory.getFactory().getWorkloadDecryptor();
+			WorkloadCrypto wd = DefaultFactory.getFactory().getWorkloadCrypto();
 			
 			String plainTextWorkloadJson = wd.getDecryptedWorkload(DefaultFactory.getConfigLocation(), rq.getEncryptedKey() );
-			System.out.println(String.format("decrypted key: %s",plainTextWorkloadJson ));
+			//System.out.println(String.format("decrypted key: %s",plainTextWorkloadJson ));
 			LOGGER.debug(String.format("zipped and decompressed: %s", plainTextWorkloadJson));
 			rq = util.unmmarshalUseCases(plainTextWorkloadJson);
 		}
@@ -115,7 +115,6 @@ public class WorkloadController implements WebMvcConfigurer {
 		LOGGER.debug("PUT#3");
 		
 		apiResponse.setNanoStop( System.nanoTime() );
-		System.out.println("PUT#3");
 		
 		return apiResponse;
 	}
@@ -134,6 +133,37 @@ public class WorkloadController implements WebMvcConfigurer {
 		apiResponse.setStatus(Status.SUCCESS);
 		if (workload!=null) {
 			apiResponse.setResult( workload.getVerboseState() );
+			LOGGER.debug("GET#3");
+		}
+		
+		apiResponse.setNanoStop( System.nanoTime() );
+		LOGGER.debug("getWorkload() apiResponse: " + apiResponse.toString() );
+		return apiResponse;
+	}
+	@CrossOrigin 
+	@RequestMapping(
+		    value = "/encryptedWorkload", 		    		    
+		    method = RequestMethod.GET)	
+	public ApiResponse getEncryptedWorkload(
+			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
+
+		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
+		apiResponse.setStatus(Status.FAILURE); //assume the worst
+		
+		Workload workload = DefaultFactory.getFactory().getWorkloadSingleton();
+		apiResponse.setStatus(Status.SUCCESS);
+		String encryptedWorkload = null;
+		if (workload!=null) {
+			
+			WorkloadCrypto crypto = DefaultFactory.getFactory().getWorkloadCrypto();
+			
+			SerializaionUtil serialization = com.github.eostermueller.snail4j.workload.DefaultFactory.getFactory().createSerializationUtil();
+		
+			String json = serialization.marshalUseCases((UseCases) workload.getVerboseState());
+			
+			encryptedWorkload = crypto.getEncryptedWorkload(DefaultFactory.getConfigLocation(), json);
+			
+			apiResponse.setResult( encryptedWorkload );
 			LOGGER.debug("GET#3");
 		}
 		
