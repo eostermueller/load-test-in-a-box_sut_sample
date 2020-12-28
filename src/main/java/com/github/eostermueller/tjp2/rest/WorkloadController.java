@@ -46,7 +46,6 @@ import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 @EnableWebMvc
 public class WorkloadController implements WebMvcConfigurer {
 	
-	private static String DEFAULT_WORKLOAD = "{\"origin\":0,\"encryptedKey\":null,\"useCases\":[{\"processingUnits\":[{\"description\":{\"en_US\":\"http-response_delay_25ms\"},\"useCaseName\":\"02_AlienSystems\",\"selected\":false,\"methodWrapper\":{\"parameters\":[],\"declaringClassName\":\"com.github.eostermueller.tjp2.alien.BackendHttpRequest\",\"methodName\":\"getBackendData_delay_25ms\"}},{\"description\":{\"en_US\":\"http-response_delay_10s\"},\"useCaseName\":\"02_AlienSystems\",\"selected\":true,\"methodWrapper\":{\"parameters\":[],\"declaringClassName\":\"com.github.eostermueller.tjp2.alien.BackendHttpRequest\",\"methodName\":\"getBackendData_delay_10s\"}},{\"description\":{\"en_US\":\"http-response_delay_1s\"},\"useCaseName\":\"02_AlienSystems\",\"selected\":false,\"methodWrapper\":{\"parameters\":[],\"declaringClassName\":\"com.github.eostermueller.tjp2.alien.BackendHttpRequest\",\"methodName\":\"getBackendData_delay_1s\"}},{\"description\":{\"en_US\":\"http-response_noWait\"},\"useCaseName\":\"02_AlienSystems\",\"selected\":false,\"methodWrapper\":{\"parameters\":[],\"declaringClassName\":\"com.github.eostermueller.tjp2.alien.BackendHttpRequest\",\"methodName\":\"getBackendData_noWait\"}}],\"name\":\"02_AlienSystems\"}]}";
 	@Autowired
 	private ResourceLoader resourceLoader;
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -71,15 +70,6 @@ public class WorkloadController implements WebMvcConfigurer {
 		}
 		
 		return apiResponse;
-	}
-	@CrossOrigin 
-	@RequestMapping(
-		    value = "/defaultWorkload", 		    		    
-		    method = RequestMethod.GET)	
-	public ApiResponse setDefaultWorkload() 
-			throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes, DecryptionException {
-		
-		return updateWorkload(DEFAULT_WORKLOAD);
 	}
 	
 
