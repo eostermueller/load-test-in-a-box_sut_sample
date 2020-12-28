@@ -91,6 +91,8 @@ public class WorkloadController implements WebMvcConfigurer {
 		LOGGER.debug("input js0n " + js0n );
 		UseCases rq = util.unmmarshalUseCases(js0n);
 		
+		rq.resolveAlias();
+		
 		if (rq.getEncryptedKey()!=null && rq.getEncryptedKey().length()>0) {
 			System.out.println(String.format("Found encrypted key: %s",rq.getEncryptedKey() ));
 			
