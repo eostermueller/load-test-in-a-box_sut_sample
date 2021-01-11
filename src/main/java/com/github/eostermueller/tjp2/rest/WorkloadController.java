@@ -1,5 +1,7 @@
 package com.github.eostermueller.tjp2.rest;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Comparator;
 
 import javax.servlet.ServletContext;
@@ -23,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.github.eostermueller.snail4j.workload.AliasManager;
 import com.github.eostermueller.snail4j.workload.ApiResponse;
 import com.github.eostermueller.snail4j.workload.DefaultFactory;
 import com.github.eostermueller.snail4j.workload.Snail4jWorkloadException;
@@ -84,6 +87,7 @@ public class WorkloadController implements WebMvcConfigurer {
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes, DecryptionException {
 		
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
+		String aliasStatus = "<uninitialized>";
 		
 
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
@@ -91,34 +95,53 @@ public class WorkloadController implements WebMvcConfigurer {
 		LOGGER.debug("input js0n " + js0n );
 		UseCases rq = util.unmmarshalUseCases(js0n);
 		
-		rq.resolveAlias();
-		
-		if (rq.getEncryptedKey()!=null && rq.getEncryptedKey().length()>0) {
-			System.out.println(String.format("Found encrypted key: %s",rq.getEncryptedKey() ));
 			
-			WorkloadCrypto wd = DefaultFactory.getFactory().getWorkloadCrypto();
-			
-			String plainTextWorkloadJson = wd.getDecryptedWorkload(DefaultFactory.getConfigLocation(), rq.getEncryptedKey() );
-			//System.out.println(String.format("decrypted key: %s",plainTextWorkloadJson ));
-			LOGGER.debug(String.format("zipped and decompressed: %s", plainTextWorkloadJson));
-			rq = util.unmmarshalUseCases(plainTextWorkloadJson);
+		if (rq.getAlias()!=null && rq.getAlias().length() > 0) {
+			AliasManager aliasManager = DefaultFactory.getFactory().getAliasManager();
+			String encryptedKey = aliasManager.resolve(rq.getAlias());
+			if (encryptedKey!=null && encryptedKey.length() > 0) {
+				rq.setEncryptedKey(encryptedKey);
+				aliasStatus = "alias " + rq.getAlias() + " successfully resolved";
+			} else {
+				apiResponse.setStatus(Status.FAILURE_ALIAS_DOES_NOT_EXIST);
+				aliasStatus = String.format("Alias [%s] does not exist", rq.getAlias() );
+				apiResponse.setMessage( aliasStatus );
+			}
 		}
+		
+		if (!apiResponse.isFailure()) {
+			if (rq.getEncryptedKey()!=null && rq.getEncryptedKey().length()>0) {
+				
+				WorkloadCrypto wd = DefaultFactory.getFactory().getWorkloadCrypto();
+				
+				String plainTextWorkloadJson = wd.getDecryptedWorkload(DefaultFactory.getConfigLocation(), rq.getEncryptedKey() );
+				rq = util.unmmarshalUseCases(plainTextWorkloadJson);
+			}
 
-		LOGGER.debug("rq.getProcessingUnits().size(): " + rq.getUseCases().size() );
-		System.out.println("rq.getProcessingUnits().size(): " + rq.getUseCases().size() );
-		WorkloadBuilder workloadBuilder = DefaultFactory.getFactory().createWorkloadBuilder();
-		
-		Workload w = workloadBuilder.createWorkload(rq);
-		LOGGER.debug("punits" + w.size());
-		
-		w.setVerboseState(rq);
-		LOGGER.debug("PUT#1");
-		
-		DefaultFactory.getFactory().setWorkloadSingleton(w);
-		LOGGER.debug("PUT#2");
-		
-		apiResponse.setStatus(Status.SUCCESS);
-		LOGGER.debug("PUT#3");
+			WorkloadBuilder workloadBuilder = DefaultFactory.getFactory().createWorkloadBuilder();
+			
+			try {
+				Workload w = workloadBuilder.createWorkload(rq);
+				
+				if (w != null) {
+					w.setVerboseState(rq);
+					DefaultFactory.getFactory().setWorkloadSingleton(w);
+					apiResponse.setStatus(Status.SUCCESS);
+				} else {
+					apiResponse.setStatus(Status.FAILURE_WORKLOAD_CREATION);
+				}
+			} catch (Exception e) {
+				apiResponse.setStatus(Status.FAILURE_WORKLOAD_CREATION_EXCEPTION);
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				apiResponse.setMessage(
+						String.format("Exception creating workload.  Message [%s] Stacktrace [%s]", 
+						e.getMessage(),
+						sw.toString()
+						));
+			}
+		}
 		
 		apiResponse.setNanoStop( System.nanoTime() );
 		
