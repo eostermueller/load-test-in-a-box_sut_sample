@@ -3,6 +3,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     	<modelVersion>4.0.0</modelVersion>
 
+	<properties>
+                <java.version>1.8</java.version>
+	        <my.lib>${org.glowroot:glowroot-agent:jar}</my.lib>
+	        <junit.platform.version>1.2.0</junit.platform.version>
+	</properties>
     	<groupId>com.github.eostermueller.tjp2</groupId>
     	<artifactId>tjp2</artifactId>
     	<version>0.0.2</version>
@@ -11,15 +16,8 @@
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-parent</artifactId>
         	<!--   <version>2.0.5.RELEASE</version>  -->
-        	<version>2.2.2.RELEASE</version>
+		<version>2.3.7.RELEASE</version>
 	</parent>
-
-	<properties>
-		<java.version>1.8</java.version>
-        	<my.lib>${org.glowroot:glowroot-agent:jar}</my.lib>
-                <junit.platform.version>1.2.0</junit.platform.version>
-	</properties>
-
 
 	<dependencies>
 		<dependency>
@@ -257,7 +255,7 @@
 			<version>2.3.2</version>
 			<configuration>
 			  <debug>true</debug>
-			  <debuglevel>none</debuglevel>
+			  <debuglevel>lines,vars,source</debuglevel>
 			</configuration>
 		</plugin>
 
