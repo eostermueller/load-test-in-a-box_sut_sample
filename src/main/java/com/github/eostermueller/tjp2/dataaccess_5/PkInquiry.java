@@ -18,18 +18,22 @@ import com.github.eostermueller.tjp2.model.Branch;
 import com.github.eostermueller.tjp2.model.Transaction;
 
 public class PkInquiry {
-	public PkInquiry(AppContext val) {
-		this.pgBench = val;
+	public Connection getConnection() throws SQLException, PerfSandboxException {
+		return this.ctx.getConnection();
 	}
-	private AppContext pgBench;
+
+	public PkInquiry(AppContext val) {
+		this.ctx = val;
+	}
+	private AppContext ctx;
 	public Account getAccount(long accountId) throws SQLException, PerfSandboxException {
 		Account account = new Account();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			con = pgBench.getConnection();
-			ps = con.prepareStatement( AccountMgr5.m_sqlTextMgr5.getAccountPkInquirySql() );
+			con = getConnection();
+			ps = con.prepareStatement( AccountMgr5.sqlTextMgr5.getAccountPkInquirySql() );
 			ps.setLong(1, accountId);
 			
 			rs = ps.executeQuery();
@@ -75,8 +79,8 @@ public class PkInquiry {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			con = pgBench.getConnection();
-			ps = con.prepareStatement( AccountMgr5.m_sqlTextMgr5.getBranchPkInquirySql() );
+			con = getConnection();
+			ps = con.prepareStatement( AccountMgr5.sqlTextMgr5.getBranchPkInquirySql() );
 			ps.setInt(1, branchId);
 			rs = ps.executeQuery();
 			short count = 0;
@@ -100,8 +104,8 @@ public class PkInquiry {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			con = pgBench.getConnection();
-			ps = con.prepareStatement( AccountMgr5.m_sqlTextMgr5.getHistoryPkInquirySql() );
+			con = getConnection();
+			ps = con.prepareStatement( AccountMgr5.sqlTextMgr5.getHistoryPkInquirySql() );
 			ps.setLong(1, transactionId);
 			rs = ps.executeQuery();
 			short count = 0;

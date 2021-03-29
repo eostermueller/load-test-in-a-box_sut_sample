@@ -14,7 +14,7 @@ import com.github.eostermueller.tjp2.model.Accounts;
 
 public class AccountMgr6 implements BaseManager {
 	public AccountMgr6() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
 
 	private AppContext appContext = null;

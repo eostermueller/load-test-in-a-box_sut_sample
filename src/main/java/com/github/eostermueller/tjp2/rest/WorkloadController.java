@@ -14,12 +14,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 //import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -57,7 +61,8 @@ public class WorkloadController implements WebMvcConfigurer {
 	@CrossOrigin 
 	@RequestMapping(
 		    value = "/execute",
-		    method = RequestMethod.GET)	
+		    method = RequestMethod.GET,
+		    produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ApiResponse execute() throws Snail4jWorkloadException, WorkloadInvocationException {
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
 
@@ -77,13 +82,11 @@ public class WorkloadController implements WebMvcConfigurer {
 	
 
 	
-	
 	@CrossOrigin 
-	@RequestMapping(
-		    value = "/workload", 		    		    
-		    method = RequestMethod.PUT)	
+	@ResponseStatus(value = HttpStatus.OK)
+    @PutMapping(value="/workload", consumes = MediaType.APPLICATION_JSON_VALUE)	
 	public ApiResponse updateWorkload(
-			@RequestBody String js0n
+			@RequestBody String json
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes, DecryptionException {
 		
 		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
@@ -92,8 +95,8 @@ public class WorkloadController implements WebMvcConfigurer {
 
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		
-		LOGGER.debug("input js0n " + js0n );
-		UseCases rq = util.unmmarshalUseCases(js0n);
+		LOGGER.debug("input js0n " + json );
+		UseCases rq = util.unmmarshalUseCases(json);
 		
 			
 		if (rq.getAlias()!=null && rq.getAlias().length() > 0) {
@@ -151,7 +154,8 @@ public class WorkloadController implements WebMvcConfigurer {
 	@CrossOrigin 
 	@RequestMapping(
 		    value = "/workload", 		    		    
-		    method = RequestMethod.GET)	
+		    method = RequestMethod.GET,
+		    produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ApiResponse getWorkload(
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
 
@@ -172,7 +176,8 @@ public class WorkloadController implements WebMvcConfigurer {
 	@CrossOrigin 
 	@RequestMapping(
 		    value = "/encryptedWorkload", 		    		    
-		    method = RequestMethod.GET)	
+		    method = RequestMethod.GET,
+		    produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ApiResponse getEncryptedWorkload(
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
 
@@ -203,9 +208,10 @@ public class WorkloadController implements WebMvcConfigurer {
 	@CrossOrigin 
 	@RequestMapping(
 		    value = "/useCases", 		    		    
-		    method = RequestMethod.GET)	
+		    method = RequestMethod.GET,
+		    produces = MediaType.APPLICATION_JSON_VALUE)	
 	public String useCases(
-			@RequestParam String useCaseSearchCriteria
+			@RequestParam("useCaseSearchCriteria") String useCaseSearchCriteria
 			) throws Snail4jWorkloadException, WorkloadInvocationException, OnlyStringAndLongAndIntAreAllowedParameterTypes {
 		
 		long nanoStart = System.nanoTime();

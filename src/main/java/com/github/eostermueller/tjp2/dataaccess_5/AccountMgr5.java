@@ -1,10 +1,9 @@
 package com.github.eostermueller.tjp2.dataaccess_5;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import com.github.eostermueller.tjp2.AppContext;
 import com.github.eostermueller.snail4j.workload.annotations.Load;
@@ -13,8 +12,20 @@ import com.github.eostermueller.tjp2.PerfSandboxException;
 import com.github.eostermueller.tjp2.dataaccess.BaseManager;
 import com.github.eostermueller.tjp2.model.Account;
 import com.github.eostermueller.tjp2.model.Accounts;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountMgr5 implements BaseManager {
+	protected PkInquiry pkInquiry;
+	protected ListInquiry listInquiry;
+	public ListInquiry getListInquiry() {
+		return listInquiry;
+	}
+	public void setListInquiry(ListInquiry listInquiry) {
+		this.listInquiry = listInquiry;
+	}
+	public static SqlTextMgr5 sqlTextMgr5 = new SqlTextMgr5();
+	
 	public void setAppContext(AppContext val) {
 		this.init(val);
 	}
@@ -22,19 +33,22 @@ public class AccountMgr5 implements BaseManager {
 		return this.appContext;
 	}
 	public AccountMgr5() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
-
-	
-	
 	public void init(AppContext val) {
 		this.appContext = val;
-		this.m_sqlTextMgr5.setLogger(val);
-		m_pkInquiry = appContext.getPkInquiry();
-		m_listInquiry = appContext.getListInquiry();
+		this.sqlTextMgr5.setLogger(val);
+		setPkInquiry(appContext.getPkInquiry() );
+		this.setListInquiry(appContext.getListInquiry());
 	}
-	private AppContext appContext = null;
-	private AppContext getPerfSandboxSingleton() {
+	public void setPkInquiry(PkInquiry val) {
+		this.pkInquiry = val;
+	}
+	public PkInquiry getPkInquiry() {
+		return this.pkInquiry;
+	}
+	protected AppContext appContext = null;
+	protected AppContext getPerfSandboxSingleton() {
 		return this.appContext;
 	}
 
@@ -48,14 +62,11 @@ public class AccountMgr5 implements BaseManager {
 						this.getPerfSandboxSingleton().NUM_ACCOUNTS);
 		return this.getAccounts(accountIdsCriteria);
 	}
-	private PkInquiry m_pkInquiry;
-	private ListInquiry m_listInquiry;
-	public static SqlTextMgr5 m_sqlTextMgr5 = new SqlTextMgr5();
 	public Accounts getAccounts(List<Long> randomAccountIds) {
 		Accounts accounts = new Accounts();
 		for( long accountId : randomAccountIds) {
 			try {
-				Account a = m_pkInquiry.getAccount(accountId);
+				Account a = getPkInquiry().getAccount(accountId);
 				getAccountHistory(a);
 				accounts.addAccount( a );
 			} catch (SQLException e) {
@@ -67,9 +78,9 @@ public class AccountMgr5 implements BaseManager {
 		return accounts;
 	}
 	public void getAccountHistory(Account val) throws SQLException, PerfSandboxException {
-		List<Long> historyIds = m_listInquiry.getTransactions(val.accountId);
+		List<Long> historyIds = listInquiry.getTransactions(val.accountId);
 		for( long historyId : historyIds) {
-			val.transactions.add(m_pkInquiry.getTransaction(historyId));
+			val.transactions.add(getPkInquiry().getTransaction(historyId));
 		}
 	}
 

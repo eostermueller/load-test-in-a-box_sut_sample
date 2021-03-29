@@ -30,7 +30,7 @@ public class AccountMgr4  implements BaseManager {
 
 	public static SqlTextMgr4 m_sqlTextMgr4 = new SqlTextMgr4();
 	public AccountMgr4() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
 	
 	public void setAppContext(AppContext val) {

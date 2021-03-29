@@ -26,7 +26,7 @@ public class AccountMgr3 implements BaseManager {
 		this.init(val);
 	}
 	public AccountMgr3() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
 
 	public void init(AppContext val) {

@@ -24,7 +24,7 @@ public class BackendHttpRequest {
 		return this.appContext;
 	}
 	public BackendHttpRequest() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
 	
 	@Load(

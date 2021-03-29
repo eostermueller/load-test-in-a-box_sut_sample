@@ -15,11 +15,11 @@ import com.github.eostermueller.tjp2.dataaccess.PerfSandboxUtil;
 import com.github.eostermueller.tjp2.model.Transaction;
 
 public class ListInquiry {
+	AppContext pgBench = null;
 
 	public ListInquiry(AppContext val) {
 		this.pgBench = val;
 	}
-	AppContext pgBench = null;
 	public List<Long> getTransactions(long accountId) throws SQLException, PerfSandboxException  {
 		
 		Connection con = null; 
@@ -28,7 +28,7 @@ public class ListInquiry {
 		List<Long> list = null;
 		try {
 			con = pgBench.getConnection();
-			ps = con.prepareStatement( AccountMgr5.m_sqlTextMgr5.getHistoryListSql() );
+			ps = con.prepareStatement( AccountMgr5.sqlTextMgr5.getHistoryListSql() );
 			ps.setLong(1, accountId);
 			rs = ps.executeQuery();
 			list = new ArrayList<Long>();

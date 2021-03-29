@@ -23,11 +23,11 @@ import com.github.eostermueller.tjp2.model.Account;
 import com.github.eostermueller.tjp2.model.Accounts;
 import com.github.eostermueller.tjp2.model.Transaction;
 import com.github.eostermueller.snail4j.workload.annotations.UserInterfaceDescription;
-@Component
+
 public class AccountMgr1 implements BaseManager {
 	private static final long NUM_ACCOUNTS = 10;
 	public AccountMgr1() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
 	}
 	
 	public void setAppContext(AppContext val) {

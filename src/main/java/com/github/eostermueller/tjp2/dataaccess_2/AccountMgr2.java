@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import com.github.eostermueller.tjp2.AppContext;
 import com.github.eostermueller.snail4j.workload.annotations.Load;
@@ -23,19 +21,37 @@ import com.github.eostermueller.tjp2.model.Accounts;
 import com.github.eostermueller.tjp2.model.Transaction;
 
 public class AccountMgr2 implements BaseManager {
+	boolean dbConnectionFromPool = true;
+	public boolean isDbConnectionFromPool() {
+		return dbConnectionFromPool;
+	}
+	public void setDbConnectionFromPool(boolean dbConnectionFromPool) {
+		this.dbConnectionFromPool = dbConnectionFromPool;
+	}
 	@Autowired
 	public void setAppContext(AppContext val) {
 		this.init(val);
 	}
 	public AccountMgr2() {
-		this.setAppContext(AppContext.SINGLETON);
+		this.setAppContext(AppContext.SINGLETON_HIKARI_JDBC_CON_POOL);
+	}
+	protected Connection getConnection() throws SQLException, PerfSandboxException {
+		Connection c = null;
+		
+		if ( isDbConnectionFromPool() )
+			c = this.getAppContext().getConnection();
+		else
+			c = this.getAppContext().createDriverManagerConnection();
+		
+		return c;
+		
 	}
 	
 	public void init(AppContext val) {
 		this.appContext = val;
 		m_sqlTextMgr2.setLogger(val);
 	}
-	private AppContext appContext = null;
+	protected AppContext appContext = null;
 
 	public static SqlTextMgr2 m_sqlTextMgr2 = new SqlTextMgr2();
 	public Accounts getAccounts(List<Long> randomAccountIds) throws PerfSandboxException {
@@ -45,7 +61,7 @@ public class AccountMgr2 implements BaseManager {
 		
 		return accounts;
 	}
-	private AppContext getPerfSandboxSingleton() {
+	protected AppContext getPerfSandboxSingleton() {
 		return this.appContext;
 	}
 
@@ -67,7 +83,7 @@ public class AccountMgr2 implements BaseManager {
 		ResultSet rs = null;
 		Accounts accounts = new Accounts();
 		try {
-			con = appContext.getConnection();
+			con = getConnection();
 			ps = con.prepareStatement( m_sqlTextMgr2.getMultipleAccountsSql(accountIds.size()) );
 			for (int i = 1; i <= accountIds.size(); i++) {
 				ps.setLong(i, accountIds.get(i-1).longValue());
@@ -123,7 +139,7 @@ public class AccountMgr2 implements BaseManager {
 		PreparedStatement ps = null; 
 		ResultSet rs = null;
 		try {
-			con = appContext.getConnection();
+			con = getConnection();
 			ps = con.prepareStatement( m_sqlTextMgr2.getHistorySql(accounts.getAccounts().size()) );
 			
 			for (int i = 1; i <= accounts.getAccounts().size();i++) {

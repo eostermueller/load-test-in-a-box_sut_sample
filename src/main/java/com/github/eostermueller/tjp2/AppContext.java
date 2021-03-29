@@ -1,7 +1,7 @@
 package com.github.eostermueller.tjp2;
 
 import java.sql.Connection;
-
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,19 +22,25 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import com.github.eostermueller.tjp2.dataaccess.AppContextDriverManager;
+import com.github.eostermueller.tjp2.dataaccess.AppContextHikari;
 import com.github.eostermueller.tjp2.dataaccess.BaseSqlTextMgr;
 import com.github.eostermueller.tjp2.dataaccess.PerfSandboxUtil;
 import com.github.eostermueller.tjp2.dataaccess_5.ListInquiry;
 import com.github.eostermueller.tjp2.dataaccess_5.PkInquiry;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariConfig;
-
+import org.springframework.stereotype.Component;
 /**
  * The JDBC url (for this class's DataSources) and wiremock URL are specified in -D parameters, ones specified by snail4j
  * @author eoste
  *
  */
-public class AppContext implements InitializingBean, ApplicationListener<ContextRefreshedEvent>, Logger {
+@Component
+public abstract class AppContext implements InitializingBean, ApplicationListener<ContextRefreshedEvent>, Logger {
+	
+	public abstract Connection getConnection() throws SQLException, PerfSandboxException;
+
 	public static final long NUM_ACCOUNTS = 10;
 
 	private static final String H2_PORT_JAVA_SYS_PROP_NAME = "snail4j.h2.port"; //
@@ -45,7 +51,12 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 
 	private static final String H2_HOST_JAVA_SYS_PROP_NAME = "snail4j.h2.hostname";
 
-	public static AppContext SINGLETON = new AppContext();
+	private static final String DB_SCHEMA_01 = "S01";
+
+	private static final String DB_SCHEMA_02 = "S02";
+
+	public static AppContext SINGLETON_HIKARI_JDBC_CON_POOL = new AppContextHikari();
+	public static AppContext SINGLETON_NO_JDBC_CON_POOL = new AppContextDriverManager();
 	
 	private int db = 1;
 	private int readDataCount = 0;
@@ -58,14 +69,14 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	private BranchInquiry branchInquiry = null;
 	public AtomicBoolean backendStarted = new AtomicBoolean(false);
 	
-	private AppContext() {
+	public AppContext() {
 		
 		try {
 			init();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		m_pkInquiry_3 = new PkInquiry(this);
+		m_pkInquiry_5 = new PkInquiry(this);
 		m_listInquiry_3 = new ListInquiry(this); 
 	}
 	private AppContext init() throws SQLException {
@@ -139,7 +150,7 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	private AtomicLong m_maxBranchId_01 = new AtomicLong(20);
 	private AtomicLong m_maxBranchId_02 = new AtomicLong(20);
 
-	private PkInquiry m_pkInquiry_3 = null;
+	private PkInquiry m_pkInquiry_5 = null;
 
 	private ListInquiry m_listInquiry_3 = null;
 
@@ -175,13 +186,19 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	 * @return
 	 */
 	private HikariConfig getHikariConfig(int port, String h2Hostname, String schema) {
-		String jdbcUrl = "jdbc:h2:tcp://" + h2Hostname + ":" + port + "/./perfSandboxDb;SCHEMA=" + schema + ";AUTO_SERVER=TRUE";
+		
+		String jdbcUrl = createJdbcUrl(port, h2Hostname, schema);
 
 		HikariConfig config = new HikariConfig();
 		config.setIdleTimeout(42000);
 		config.setJdbcUrl(jdbcUrl);
 		config.setDriverClassName("org.h2.Driver");
 		return config;
+	}
+	private String createJdbcUrl(int port, String h2Hostname, String schema) {
+		String jdbcUrl = "jdbc:h2:tcp://" + h2Hostname + ":" + port + "/./perfSandboxDb;SCHEMA=" + schema + ";AUTO_SERVER=TRUE";
+
+		return jdbcUrl;
 	}
 	/**
 	 * "S01" and "S02" are the two schemas that get populated using these instructions:
@@ -196,14 +213,41 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	private void initDataSources() {
 	    //HikariConfig config = new HikariConfig("/hikari01.properties");
 		
-		HikariConfig config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), "S01");
+		HikariConfig config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), DB_SCHEMA_01);
 	    
  	    this.dataSource01 = new HikariDataSource(config);
 	    log("Hikari JdbcUrl 01 [" + config.getJdbcUrl() + "]");
 
-	    config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), "S02");
+	    config = this.getHikariConfig(this.getH2Port(), this.getH2Hostname(), DB_SCHEMA_02);
  	    this.dataSource02 = new HikariDataSource(config);
 	    log("Hikari JdbcUrl 02 [" + config.getJdbcUrl() + "]");
+	}
+	
+	public String getJdbcUrl() throws PerfSandboxException {
+		String rc = null;
+		
+		rc = createJdbcUrl(
+				this.getH2Port(), 
+				this.getH2Hostname(),
+				this.getDbSchema()
+				);
+		
+	    return rc;
+	}
+	private String getDbSchema() throws PerfSandboxException {
+		String rc = null;
+		switch(getDb()) {
+		case 1:
+			rc = DB_SCHEMA_01;
+			break;
+		case 2:
+			rc = DB_SCHEMA_02;
+			break;
+		default:
+			throw new PerfSandboxException("Was expecting DB=1 or DB=2 but found [" + getDb() + "]");
+		}
+		
+		return rc;
 	}
  	@Bean(destroyMethod = "close")
 	public DataSource getDataSource() throws SQLException {
@@ -234,7 +278,13 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 	private int accountCloneCount;
 
 
-	public Connection getConnection() throws SQLException, PerfSandboxException {
+	public Connection createDriverManagerConnection() throws SQLException, PerfSandboxException {
+		
+		Connection c = DriverManager.getConnection( getJdbcUrl() );
+		return c;
+	}
+	
+	public Connection getHikariConnection() throws SQLException, PerfSandboxException {
 		Connection c = null;
 		if (this.db==1)
 			c = this.dataSource01.getConnection();
@@ -290,7 +340,7 @@ public class AppContext implements InitializingBean, ApplicationListener<Context
 		return max;
 	}
 	public PkInquiry getPkInquiry() {
-		return m_pkInquiry_3;
+		return m_pkInquiry_5;
 	}
 	public ListInquiry getListInquiry() {
 		return m_listInquiry_3;
