@@ -8,12 +8,10 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 //import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -43,7 +41,6 @@ import com.github.eostermueller.snail4j.workload.engine.WorkloadInvocationExcept
 import com.github.eostermueller.snail4j.workload.model.Snail4jLibrary;
 import com.github.eostermueller.snail4j.workload.model.UseCase;
 import com.github.eostermueller.snail4j.workload.model.UseCases;
-import com.github.eostermueller.snail4j.workload.model.WorkloadSpecRq;
 import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 
 @RequestMapping("/traffic")
@@ -53,8 +50,8 @@ import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 @EnableWebMvc
 public class WorkloadController implements WebMvcConfigurer {
 	
-	@Autowired
-	private ResourceLoader resourceLoader;
+//	@Autowired
+//	private ResourceLoader resourceLoader;
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 
@@ -232,7 +229,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		long nanoStop = System.nanoTime();
 		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
 		String json = util.marshalUseCases(useCases);
-		LOGGER.debug("leaving WorkloadController.useCases()");
+		LOGGER.debug("leaving WorkloadController.useCases() nano duration[" + (nanoStop-nanoStart) + "]");
 		return json;
 	}
 	
