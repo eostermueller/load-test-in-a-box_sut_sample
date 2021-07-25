@@ -1,8 +1,11 @@
 package com.github.eostermueller.tjp2.rest;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -30,17 +33,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.github.eostermueller.snail4j.workload.AliasManager;
 import com.github.eostermueller.snail4j.workload.ApiResponse;
 import com.github.eostermueller.snail4j.workload.DefaultFactory;
-import com.github.eostermueller.snail4j.workload.Snail4jWorkloadException;
 import com.github.eostermueller.snail4j.workload.OnlyStringAndLongAndIntAreAllowedParameterTypes;
+import com.github.eostermueller.snail4j.workload.Snail4jWorkloadException;
 import com.github.eostermueller.snail4j.workload.Status;
 import com.github.eostermueller.snail4j.workload.crypto.DecryptionException;
 import com.github.eostermueller.snail4j.workload.crypto.WorkloadCrypto;
 import com.github.eostermueller.snail4j.workload.engine.Workload;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadBuilder;
 import com.github.eostermueller.snail4j.workload.engine.WorkloadInvocationException;
-import com.github.eostermueller.snail4j.workload.model.Snail4jLibrary;
+import com.github.eostermueller.snail4j.workload.markdown.MarkdownLoader;
+import com.github.eostermueller.snail4j.workload.markdown.ParentMarkdownFile;
 import com.github.eostermueller.snail4j.workload.model.UseCase;
 import com.github.eostermueller.snail4j.workload.model.UseCases;
+import com.github.eostermueller.snail4j.workload.model.WorkloadLibrary;
 import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 
 @RequestMapping("/traffic")
@@ -50,10 +55,7 @@ import com.github.eostermueller.snail4j.workload.model.json.SerializaionUtil;
 @EnableWebMvc
 public class WorkloadController implements WebMvcConfigurer {
 	
-//	@Autowired
-//	private ResourceLoader resourceLoader;
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
 
 	@CrossOrigin 
 	@RequestMapping(
@@ -76,8 +78,27 @@ public class WorkloadController implements WebMvcConfigurer {
 		
 		return apiResponse;
 	}
-	
+	@CrossOrigin 
+	@RequestMapping(
+		    value = "/markdown",
+		    method = RequestMethod.GET,
+		    produces = MediaType.APPLICATION_JSON_VALUE)	
+	public ApiResponse markdownList() throws Snail4jWorkloadException, WorkloadInvocationException, URISyntaxException, IOException {
+		ApiResponse apiResponse = new ApiResponse( System.nanoTime() );
+		
+		MarkdownLoader loader = DefaultFactory.getFactory().createMarkdownLoader();
+		
+		loader.setLocator( DefaultFactory.getFactory().createMarkdownLocator() );
+		
+		List<ParentMarkdownFile> allParentMdFiles = loader.getMarkdownFiles();
 
+//		SerializaionUtil util = DefaultFactory.getFactory().createSerializationUtil();
+
+		apiResponse.setResult(allParentMdFiles);
+		apiResponse.setNanoStop(System.nanoTime());
+		apiResponse.setStatus(Status.SUCCESS);
+		return apiResponse;
+	}
 	
 	@CrossOrigin 
 	@ResponseStatus(value = HttpStatus.OK)
@@ -213,7 +234,7 @@ public class WorkloadController implements WebMvcConfigurer {
 		
 		long nanoStart = System.nanoTime();
 		LOGGER.debug("About to call ClassGraph to search for [" + useCaseSearchCriteria + "]");
-		UseCases useCases = Snail4jLibrary.scan(useCaseSearchCriteria);
+		UseCases useCases = WorkloadLibrary.scan(useCaseSearchCriteria);
 		LOGGER.debug("Finished call ClassGraph");
 		Comparator<UseCase> c = new Comparator<UseCase>() {
 			@Override
