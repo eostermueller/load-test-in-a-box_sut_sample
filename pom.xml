@@ -100,7 +100,7 @@
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
-      <version>3.2.0</version>
+      <version>5.0.1</version>
     </dependency>
     <!-- http://mvnrepository.com/artifact/com.h2database/h2 -->
     <!-- http://mvnrepository.com/artifact/com.github.tomakehurst/wiremock-standalone -->
