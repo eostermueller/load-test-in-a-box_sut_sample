@@ -14,9 +14,9 @@ Pat asked Gomer run the performance tests on their software to make sure it coul
 
 Pat was satisfied with Gomer's results, but could not muster the courage to mention to anyone that neither their CEO, nor anyone else, got it written into the contract that network ping time from Pat's team's software to the space station would be 100ms or less, most (like 99%) of the time.  That said, the one thing that was indeed clearly present in the contract was that their system (a RESET API) would be queried repeatedly by three concurrent threads -- and Gomer's test had that part covered.
 
-The precursor to the "there's a problem" moment came want Pat discovered new ping measurements from the LEO network team showing that ping time regularly degraded all the way to 1000ms.  How regularly?  It all depended on the ever-changing proximity of satellites carrying the signal.  
+The precursor to the "there's a problem" moment came want Pat discovered new ping measurements from the LEO network team showing that ping time from where their software would be deployed to the space station regularly degraded all the way to 1000ms.  How regularly?  It all depended on the ever-changing proximity of satellites carrying the signal.  
 
-Pat asked Bongoyo to re-run Gomer's test, but to increase the simulated time to ping the space station from 100ms to 1000ms. The results were abysmal.  The entire team went silent when Pat uttered his infamous words, "there's a problem."  Have a look at this test for yourself.  Yes, average response time was slower than the expected 1500ms.  How bad was it?
+Pat asked Bongoyo to re-run Gomer's test, but to increase the simulated time to ping the space station from 100ms to 1000ms. This would vet the worst case ping time scenario.  The results were abysmal.  The entire team went silent when Pat uttered his infamous words, "there's a problem."  Have a look at this test for yourself.  Yes, average response time was slower than the expected 1500ms.  How bad was it?
 
 !{bongoyo}
 
@@ -24,7 +24,7 @@ Pat asked Bongoyo to re-run Gomer's test, but to increase the simulated time to 
 
 1. What is the concurrency of Gomer's test?  Of Bongoyo's test?
 
-1. Say 'three thread dumps' 10 times as fast as you can.  Now use jstack (it is in the 'bin' folder of the jdk) to capture three thread dumps from the system under test in Bongoyo's test.  You will first need to find the process id (aka pid) for the process running the Java class com.github.eostermueller.tjp2.PerformanceSandboxApp.  What single word/indicator in the thread dumps points to the problem?
+1. Say 'three thread dumps' 10 times as fast as you can.  Now use jstack (it is a command line program in the 'bin' folder of the jdk) to capture three thread dumps from the system under test in Bongoyo's test.  You will first need to find the process id (aka pid) for the process running the Java class com.github.eostermueller.tjp2.PerformanceSandboxApp.  What single word/indicator in the thread dumps points to the problem?
 
 1. How many times is this word/indicator repeated in each of the thread dumps of Bongoyo's test?  
 
