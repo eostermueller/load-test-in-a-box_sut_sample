@@ -126,6 +126,7 @@
 	</dependencies>
 
 	<build>
+	  <finalName>load-test-in-a-box_sut_sample-0.0.1</finalName>
 		<!-- <defaultGoal>generate-sources</defaultGoal> -->
 		<plugins>
 
