@@ -5,7 +5,6 @@
 
 	<properties>
                 <java.version>1.8</java.version>
-	        <my.lib>${org.glowroot:glowroot-agent:jar}</my.lib>
 	        <junit.platform.version>1.2.0</junit.platform.version>
 	</properties>
     	<groupId>com.github.eostermueller.tjp2</groupId>
@@ -118,7 +117,7 @@
 		<dependency>
 			  <groupId>com.github.eostermueller</groupId>
 			  <artifactId>workload</artifactId>
-			  <version>0.0.2-SNAPSHOT</version>
+			  <version>0.0.3</version>
 		</dependency>
 		
 	
@@ -241,8 +240,7 @@
 			<argument>-XX:+PrintGCDetails</argument>
 			<argument>-verbose:sizes</argument>
 			-->
-			<argument>-javaagent:${project.build.directory}/glowroot-0.11.0/glowroot/glowroot.jar</argument>
-			<!-- <argument>-javaagent:${org.glowroot:glowroot-agent:jar}</argument> -->
+			<argument>-javaagent:${project.build.directory}/../glowroot/glowroot.jar</argument>
 			<argument>-jar</argument>
 			<argument>target/tjp2-0.0.2-spring-boot.jar</argument>
 		   </arguments>
