@@ -12,7 +12,7 @@ Pat asked Gomer to run the performance tests on their software in a test environ
 
 !{gomer}
 
-Pat was satisfied with Gomer's results, but could not muster the courage to mention to anyone that neither their CEO, nor anyone else, got it written into the contract that network ping time from Pat's team's software to the space station would be 100ms or less, most (like 99%) of the time.  That said, the one thing that was indeed clearly present in the contract was that their system (a RESET API) would be queried repeatedly by three concurrent threads -- and Gomer's test had that part covered.
+Pat was satisfied with Gomer's results, but could not muster the courage to mention to anyone that neither their CEO, nor anyone else, got it written into the contract that network ping time from Pat's team's software to the space station would be 100ms or less, most (like 99%) of the time.  That said, the one thing that was indeed clearly present in the contract was that their system (a REST API) would be queried repeatedly by three concurrent threads -- and Gomer's test had that part covered.
 
 The precursor to the "there's a problem" moment came want Pat discovered new ping measurements from the LEO network team showing that ping time from where their software would be deployed to the space station regularly degraded all the way to 1000ms.  How regularly?  It all depended on the ever-changing proximity of satellites carrying the signal.  
 
