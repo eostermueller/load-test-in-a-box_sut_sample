@@ -5,7 +5,7 @@
 
 Everyone on the team remembered that one conference call when Pat gravely said "there's a problem' and all the background chatter on the call immediately went silent.  Pat never says "there's a problem" and everyone knew it.  
 
-You see, worklife had been a bit more challenging as of late.  One day their company was deploying small scale video streaming services for corporate events, and now they were about to attempt the first ever live global video broadcast of a professional sporting event on a space station in low-earth orbit (LEO).  Failing to meet performance expectations on this project could be disastrous for the ambitious little company.
+You see, worklife had been a bit more challenging as of late.  One day their company was deploying small scale video streaming services for corporate events, and now they were about to attempt the first ever live global video broadcast of a professional sporting event that was actually scheduled to take place on a massive space station in low-earth orbit (LEO).  Athlete's competing in zero gravity!  Failing to meet performance expectations on this project could be disastrous for the ambitious little company.
 
 So, the LEO network was promised to have 100ms or faster ping latency, or at least that's what everyone said.  
 Pat asked Gomer to run the performance tests on their software to make sure it could meet the contract's 1500ms response time expectation with 100ms ping time.  Click on the link below to run the test -- but first make sure the load generator is running -- you do this by making sure the checkbox next to the "Load Generator" is checked above.
